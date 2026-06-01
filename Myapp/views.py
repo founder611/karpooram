@@ -175,8 +175,17 @@ def userpayment_post(request):
         🌿 Team ECOMONKS
         """
 
+        print("FUNCTION CALLED")
+        print(name)
+        print(email)
+        print(phone)
+        print(address)
+        print(quantity)
+        print(payment_id)
+
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
+        server.ehlo()
 
         server.login(
             # "leagaladvisorteam@gmail.com",

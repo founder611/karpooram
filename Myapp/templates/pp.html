@@ -1,14 +1,14 @@
-<!-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>ECOMONKS Payment</title>
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
 
-<button id="pay-button">Proceed to payment</button>
-
-<form id="payment-form" action="/userpayment_post/" method="POST">
+<form id="payment-form" method="POST">
 
     {% csrf_token %}
 
@@ -26,83 +26,39 @@
 
 var options = {
 
-    key: '{{ razorpay_api_key }}',
-    amount: '{{ amount }}',
-    currency: '{{ currency }}',
-    name: 'ECOMONKS',
+    key: "{{ razorpay_api_key }}",
+
+    amount: "{{ amount }}",
+
+    currency: "{{ currency }}",
+
+    name: "ECOMONKS",
+
+    description: "Karpooram Order Payment",
 
     handler: function (response) {
 
-        document.getElementById('payment_id').value =
+        console.log("PAYMENT SUCCESS");
+
+        console.log(response);
+
+        // Set payment ID
+        document.getElementById("payment_id").value =
             response.razorpay_payment_id;
 
-        document.getElementById('payment-form').submit();
-    }
-};
+        // Send form data to Django backend
+        fetch("/userpayment_post/", {
 
-var rzp = new Razorpay(options);
-
-document.getElementById('pay-button').onclick = function(e) {
-
-    rzp.open();
-    e.preventDefault();
-
-}
-
-</script>
-
-</body>
-</html> -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</head>
-<body>
-
-<form id="payment-form">
-
-    {% csrf_token %}
-
-    <input type="hidden" name="payment_id" id="payment_id">
-
-    <input type="hidden" name="name" value="{{ name }}">
-    <input type="hidden" name="email" value="{{ email }}">
-    <input type="hidden" name="phone" value="{{ phone }}">
-    <input type="hidden" name="address" value="{{ address }}">
-    <input type="hidden" name="quantity" value="{{ quantity }}">
-
-</form>
-
-<script>
-
-var options = {
-
-    key: '{{ razorpay_api_key }}',
-    amount: '{{ amount }}',
-    currency: '{{ currency }}',
-
-    name: 'ECOMONKS',
-
-    description: 'Karpooram Order Payment',
-
-    handler: function (response) {
-
-        // Store Razorpay Payment ID
-        document.getElementById('payment_id').value =
-            response.razorpay_payment_id;
-
-        // Send data to Django backend
-        fetch('/userpayment_post/', {
-
-            method: 'POST',
+            method: "POST",
 
             headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                "X-CSRFToken":
+                document.querySelector('[name=csrfmiddlewaretoken]').value
             },
 
-            body: new FormData(document.getElementById('payment-form'))
+            body: new FormData(
+                document.getElementById("payment-form")
+            )
 
         })
 
@@ -110,32 +66,33 @@ var options = {
 
         .then(data => {
 
-            alert("Payment Successful");
+            console.log("SERVER RESPONSE:", data);
 
-            // Redirect after success
+            alert("Payment Successful & Email Sent");
+
             window.location.href = "/";
 
         })
 
         .catch(error => {
 
-            alert("Something went wrong");
+            console.log("FETCH ERROR:", error);
 
-            console.log(error);
+            alert("Payment successful but mail failed");
 
         });
 
     },
 
     theme: {
-        color: "#3399cc"
+        color: "#0b7d45"
     }
 
 };
 
 var rzp = new Razorpay(options);
 
-// Auto Open Razorpay
+// Auto open payment popup
 window.onload = function () {
 
     rzp.open();
