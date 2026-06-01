@@ -168,8 +168,10 @@ Thank you for ordering from ECOMONKS.
         server.starttls()
 
         server.login(
-            "leagaladvisorteam@gmail.com",
-            "eugnxtyylwtqwlav"
+            # "leagaladvisorteam@gmail.com",
+            "founder@ecomonks.in",
+            "crmwddzdzoqatofz"
+            # "eugnxtyylwtqwlav"
         )
 
         subject = "ECOMONKS Order Confirmation"
@@ -177,7 +179,7 @@ Thank you for ordering from ECOMONKS.
         msg = f"Subject: {subject}\n\n{message}"
 
         server.sendmail(
-            "leagaladvisorteam@gmail.com",
+            "founder@ecomonks.in",
             email,
             msg
         )
@@ -222,16 +224,41 @@ Thank you for staying connected with us.
 
             # Gmail App Password
             server.login(
-                "leagaladvisorteam@gmail.com",
-                "eugnxtyylwtqwlav"
+                 "founder@ecomonks.in",
+                 "crmwddzdzoqatofz"
+                # "leagaladvisorteam@gmail.com",
+                # "eugnxtyylwtqwlav"
             )
 
             msg = f"Subject: {subject}\n\n{message}"
 
+            # server.sendmail(
+            #     "yourgmail@gmail.com",
+            #     email,
+            #     msg
+            # )
+
+            # Subscriber confirmation mail
             server.sendmail(
-                "yourgmail@gmail.com",
+                "founder@ecomonks.in",
                 email,
                 msg
+            )
+
+            # Admin notification mail
+            admin_message = f"""
+            New Subscription Received
+
+            Subscriber Email:
+            {email}
+            """
+
+            admin_msg = f"Subject: New ECOMONKS Subscription\n\n{admin_message}"
+
+            server.sendmail(
+                "founder@ecomonks.in",
+                "founder@ecomonks.in",
+                admin_msg
             )
 
             server.quit()
