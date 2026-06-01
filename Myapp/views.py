@@ -148,21 +148,32 @@ def userpayment_post(request):
             return HttpResponse("Email not found")
 
         message = f"""
-Hello {name},
+        Dear {name},
 
-Your payment was successful.
+        🌿 Thank you for shopping with ECOMONKS.
 
-Payment ID: {payment_id}
+        Your payment has been received successfully and your order is now confirmed.
 
-Order Details:
+        ━━━━━━━━━━━━━━━━━━
+        🧾 ORDER DETAILS
+        ━━━━━━━━━━━━━━━━━━
 
-Name: {name}
-Phone: {phone}
-Address: {address}
-Quantity: {quantity}
+        👤 Name       : {name}
+        📧 Email      : {email}
+        📞 Phone      : {phone}
+        📍 Address    : {address}
+        📦 Quantity   : {quantity}
+        💳 Payment ID : {payment_id}
 
-Thank you for ordering from ECOMONKS.
-"""
+        ━━━━━━━━━━━━━━━━━━
+
+        We truly appreciate your support and trust in ECOMONKS.
+
+        You will receive further updates regarding your order soon.
+
+        Thank you,
+        🌿 Team ECOMONKS
+        """
 
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
@@ -182,6 +193,38 @@ Thank you for ordering from ECOMONKS.
             "founder@ecomonks.in",
             email,
             msg
+        )
+
+        # Admin / Owner Mail
+        admin_message = f"""
+        🚨 NEW ORDER RECEIVED - ECOMONKS
+
+        ━━━━━━━━━━━━━━━━━━
+        🛒 CUSTOMER DETAILS
+        ━━━━━━━━━━━━━━━━━━
+
+        👤 Customer Name : {name}
+        📧 Email         : {email}
+        📞 Phone         : {phone}
+
+        📍 Delivery Address:
+        {address}
+
+        📦 Ordered Quantity : {quantity}
+
+        💳 Payment ID : {payment_id}
+
+        ━━━━━━━━━━━━━━━━━━
+        ✅ Payment Status : SUCCESSFUL
+        ━━━━━━━━━━━━━━━━━━
+        """
+
+        admin_msg = f"Subject: New ECOMONKS Order Received\n\n{admin_message}"
+
+        server.sendmail(
+            "founder@ecomonks.in",
+            "founder@ecomonks.in",
+            admin_msg
         )
 
         server.quit()
