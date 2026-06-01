@@ -258,16 +258,34 @@ def emailenquiry(request):
         subject = "ECOMONKS Subscription"
 
         message = f"""
+🌿 Welcome to ECOMONKS 🌿
+
 Hello,
 
 Thank you for subscribing to ECOMONKS.
 
-You will now receive:
-- Product updates
-- Offers
-- Latest notifications
+We are excited to have you as part of our growing family ❤️
+
+━━━━━━━━━━━━━━━━━━
+✨ WHAT YOU WILL RECEIVE
+━━━━━━━━━━━━━━━━━━
+
+🛍️ Exclusive Product Updates
+
+🎉 Special Offers & Discounts
+
+📢 Latest Announcements
+
+🌱 Natural & Traditional Product Information
+
+━━━━━━━━━━━━━━━━━━
 
 Thank you for staying connected with us.
+
+We look forward to serving you with the best from ECOMONKS.
+
+Warm Regards,
+🌿 Team ECOMONKS
 """
 
         try:
