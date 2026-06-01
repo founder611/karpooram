@@ -150,7 +150,7 @@ def userpayment_post(request):
         message = f"""
         Dear {name},
 
-        🌿 Thank you for shopping with ECOMONKS.
+        Thank you for shopping with ECOMONKS.
 
         Your payment has been received successfully and your order is now confirmed.
 
@@ -172,7 +172,7 @@ def userpayment_post(request):
         You will receive further updates regarding your order soon.
 
         Thank you,
-        🌿 Team ECOMONKS
+        Team ECOMONKS
         """
 
         print("FUNCTION CALLED")
