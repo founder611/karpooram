@@ -1,0 +1,148 @@
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<button id="pay-button">Proceed to payment</button>
+
+<form id="payment-form" action="/userpayment_post/" method="POST">
+
+    {% csrf_token %}
+
+    <input type="hidden" name="payment_id" id="payment_id">
+
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="email" value="{{ email }}">
+    <input type="hidden" name="phone" value="{{ phone }}">
+    <input type="hidden" name="address" value="{{ address }}">
+    <input type="hidden" name="quantity" value="{{ quantity }}">
+
+</form>
+
+<script>
+
+var options = {
+
+    key: '{{ razorpay_api_key }}',
+    amount: '{{ amount }}',
+    currency: '{{ currency }}',
+    name: 'ECOMONKS',
+
+    handler: function (response) {
+
+        document.getElementById('payment_id').value =
+            response.razorpay_payment_id;
+
+        document.getElementById('payment-form').submit();
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById('pay-button').onclick = function(e) {
+
+    rzp.open();
+    e.preventDefault();
+
+}
+
+</script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<form id="payment-form">
+
+    {% csrf_token %}
+
+    <input type="hidden" name="payment_id" id="payment_id">
+
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="email" value="{{ email }}">
+    <input type="hidden" name="phone" value="{{ phone }}">
+    <input type="hidden" name="address" value="{{ address }}">
+    <input type="hidden" name="quantity" value="{{ quantity }}">
+
+</form>
+
+<script>
+
+var options = {
+
+    key: '{{ razorpay_api_key }}',
+    amount: '{{ amount }}',
+    currency: '{{ currency }}',
+
+    name: 'ECOMONKS',
+
+    description: 'Karpooram Order Payment',
+
+    handler: function (response) {
+
+        // Store Razorpay Payment ID
+        document.getElementById('payment_id').value =
+            response.razorpay_payment_id;
+
+        // Send data to Django backend
+        fetch('/userpayment_post/', {
+
+            method: 'POST',
+
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+
+            body: new FormData(document.getElementById('payment-form'))
+
+        })
+
+        .then(response => response.text())
+
+        .then(data => {
+
+            alert("Payment Successful");
+
+            // Redirect after success
+            window.location.href = "/";
+
+        })
+
+        .catch(error => {
+
+            alert("Something went wrong");
+
+            console.log(error);
+
+        });
+
+    },
+
+    theme: {
+        color: "#3399cc"
+    }
+
+};
+
+var rzp = new Razorpay(options);
+
+// Auto Open Razorpay
+window.onload = function () {
+
+    rzp.open();
+
+};
+
+</script>
+
+</body>
+</html>
