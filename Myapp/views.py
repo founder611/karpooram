@@ -1,3 +1,4 @@
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -8,6 +9,10 @@ from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import HttpResponse
 import smtplib
+from openpyxl import Workbook, load_workbook
+from datetime import datetime
+
+import requests
 
 
 def homepage(request):
@@ -77,220 +82,6 @@ def raz_pay(request, amount):
         'order_id': order['id']
 
     })
-
-
-
-
-# def userpayment_post(request):
-
-#     if request.method == "POST":
-
-#         name = request.POST.get('name')
-#         email = request.POST.get('email')
-#         phone = request.POST.get('phone')
-#         address = request.POST.get('address')
-#         quantity = request.POST.get('quantity')
-#         payment_id = request.POST.get('payment_id')
-
-#         if not email:
-#             return HttpResponse("Email not found")
-
-#         message = f"""
-#         Dear {name},
-
-#         Thank you for shopping with ECOMONKS.
-
-#         Your payment has been received successfully and your order is now confirmed.
-
-#         ━━━━━━━━━━━━━━━━━━
-#         🧾 ORDER DETAILS
-#         ━━━━━━━━━━━━━━━━━━
-
-#         👤 Name       : {name}
-#         📧 Email      : {email}
-#         📞 Phone      : {phone}
-#         📍 Address    : {address}
-#         📦 Quantity   : {quantity}
-#         💳 Payment ID : {payment_id}
-
-#         ━━━━━━━━━━━━━━━━━━
-
-#         We truly appreciate your support and trust in ECOMONKS.
-
-#         You will receive further updates regarding your order soon.
-
-#         Thank you,
-#         Team ECOMONKS
-#         """
-
-#         print("FUNCTION CALLED")
-#         print(name)
-#         print(email)
-#         print(phone)
-#         print(address)
-#         print(quantity)
-#         print(payment_id)
-
-#         server = smtplib.SMTP('smtp.gmail.com', 587)
-#         server.starttls()
-#         server.ehlo()
-
-#         server.login(
-#             # "leagaladvisorteam@gmail.com",
-#             "founder@ecomonks.in",
-#             "crmwddzdzoqatofz"
-#             # "eugnxtyylwtqwlav"
-#         )
-
-#         subject = "ECOMONKS Order Confirmation"
-
-#         msg = f"Subject: {subject}\n\n{message}"
-
-#         server.sendmail(
-#             "founder@ecomonks.in",
-#             email,
-#             msg
-#         )
-
-#         # Admin / Owner Mail
-#         admin_message = f"""
-#         🚨 NEW ORDER RECEIVED - ECOMONKS
-
-#         ━━━━━━━━━━━━━━━━━━
-#         🛒 CUSTOMER DETAILS
-#         ━━━━━━━━━━━━━━━━━━
-
-#         👤 Customer Name : {name}
-#         📧 Email         : {email}
-#         📞 Phone         : {phone}
-
-#         📍 Delivery Address:
-#         {address}
-
-#         📦 Ordered Quantity : {quantity}
-
-#         💳 Payment ID : {payment_id}
-
-#         ━━━━━━━━━━━━━━━━━━
-#         ✅ Payment Status : SUCCESSFUL
-#         ━━━━━━━━━━━━━━━━━━
-#         """
-
-#         admin_msg = f"Subject: New ECOMONKS Order Received\n\n{admin_message}"
-
-#         server.sendmail(
-#             "founder@ecomonks.in",
-#             "founder@ecomonks.in",
-#             admin_msg
-#         )
-
-#         server.quit()
-
-#         return HttpResponse("""
-#             <script>
-#                 alert('Payment Successful');
-#                 window.location='/';
-#             </script>
-#         """)
-
-#     return HttpResponse("Invalid Request")
-
-
-
-# def emailenquiry(request):
-
-#     if request.method == "POST":
-
-#         email = request.POST.get('email')
-
-#         subject = "ECOMONKS Subscription"
-
-#         message = f"""
-# Welcome to ECOMONKS
-
-# Hello,
-
-# Thank you for subscribing to ECOMONKS.
-
-# We are excited to have you as part of our growing family ❤️
-
-# ━━━━━━━━━━━━━━━━━━
-# ✨ WHAT YOU WILL RECEIVE
-# ━━━━━━━━━━━━━━━━━━
-
-# 🛍️ Exclusive Product Updates
-
-# 🎉 Special Offers & Discounts
-
-# 📢 Latest Announcements
-
-# 🌱 Natural & Traditional Product Information
-
-# ━━━━━━━━━━━━━━━━━━
-
-# Thank you for staying connected with us.
-
-# We look forward to serving you with the best from ECOMONKS.
-
-# Warm Regards,
-# Team ECOMONKS
-# """
-
-#         try:
-#             server = smtplib.SMTP('smtp.gmail.com', 587)
-#             server.starttls()
-
-#             # Gmail App Password
-#             server.login(
-#                  "founder@ecomonks.in",
-#                  "crmwddzdzoqatofz"
-#                 # "leagaladvisorteam@gmail.com",
-#                 # "eugnxtyylwtqwlav"
-#             )
-
-#             msg = f"Subject: {subject}\n\n{message}"
-
-#             # server.sendmail(
-#             #     "yourgmail@gmail.com",
-#             #     email,
-#             #     msg
-#             # )
-
-#             # Subscriber confirmation mail
-#             server.sendmail(
-#                 "founder@ecomonks.in",
-#                 email,
-#                 msg
-#             )
-
-#             # Admin notification mail
-#             admin_message = f"""
-#             New Subscription Received
-
-#             Subscriber Email:
-#             {email}
-#             """
-
-#             admin_msg = f"Subject: New ECOMONKS Subscription\n\n{admin_message}"
-
-#             server.sendmail(
-#                 "founder@ecomonks.in",
-#                 "founder@ecomonks.in",
-#                 admin_msg
-#             )
-
-#             server.quit()
-
-#             return HttpResponse(
-#                 "<script>alert('Subscribed Successfully');window.location='/'</script>"
-#             )
-
-#         except Exception as e:
-#             return HttpResponse(f"Error: {e}")
-
-#     return HttpResponse("Invalid Request")
-
-
 
 
 def userpayment_post(request):
@@ -518,6 +309,24 @@ def userpayment_post(request):
 
             server.quit()
 
+
+            # SAVE TO EXCEL
+            save_order_to_excel(
+                name,
+                email,
+                phone,
+                address,
+                quantity,
+                payment_id
+            )
+
+            # SEND WHATSAPP MESSAGE
+            send_whatsapp_message(
+                name,
+                phone,
+                quantity
+            )
+
             return HttpResponse("""
             <script>
             alert('Payment Successful & Email Sent');
@@ -530,6 +339,113 @@ def userpayment_post(request):
             return HttpResponse(f"ERROR: {e}")
 
     return HttpResponse("Invalid Request")
+
+
+# ==========================================
+# SAVE ORDER TO EXCEL
+# ==========================================
+
+def save_order_to_excel(name, email, phone, address, quantity, payment_id):
+
+    file_path = "orders.xlsx"
+
+    # File illa engil create cheyyum
+    if not os.path.exists(file_path):
+
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.title = "Orders"
+
+        # Heading Row
+        sheet.append([
+            "Order No",
+            "Date",
+            "Customer Name",
+            "Email",
+            "Phone",
+            "Address",
+            "Quantity",
+            "Payment ID"
+        ])
+
+        workbook.save(file_path)
+
+    # Existing workbook open cheyyuka
+    workbook = load_workbook(file_path)
+    sheet = workbook.active
+
+    # Next Order Number
+    order_no = sheet.max_row
+
+    # Current Date Time
+    current_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+    # Add Row
+    sheet.append([
+        order_no,
+        current_date,
+        name,
+        email,
+        phone,
+        address,
+        quantity,
+        payment_id
+    ])
+
+    workbook.save(file_path)
+
+
+
+
+
+# ==========================================
+# SEND WHATSAPP MESSAGE USING WATI
+# ==========================================
+
+def send_whatsapp_message(name, phone, quantity):
+
+    # REMOVE SPACES / +91
+    phone = phone.replace(" ", "").replace("+91", "")
+
+    url = f"https://live-mt-server.wati.io/12345/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
+
+    payload = {
+        "template_name": "order_confirmation",
+        "broadcast_name": "order_confirmation",
+        "parameters": [
+            {
+                "name": "name",
+                "value": name
+            },
+            {
+                "name": "quantity",
+                "value": quantity
+            }
+        ]
+    }
+
+    headers = {
+        "Authorization": "wati_f8ed980e-5142-424a-9096-7cb7b2a40bd3.pUd4YizkgaTv3b1hRdnRjpIMRcObEZ9udOuJ6hN2L0_FptY3fKsysDz8Skt30_ziCCNiYbn4FsD0YbmN4OP8jpVDCwpN2scUSqq28QMUwtWjWmMjdxIJNPL8EQIRE3bt",
+        "Content-Type": "application/json"
+    }
+
+    try:
+
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers
+        )
+
+        print("WATI RESPONSE:")
+        print(response.status_code)
+        print(response.text)
+
+    except Exception as e:
+
+        print("WhatsApp Error:", e)
+
+
 
 
 

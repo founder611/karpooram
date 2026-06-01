@@ -973,6 +973,266 @@
     </div>
 </section>
 
+
+{% load static %}
+
+<section class="videos-gallery-section" id="videos">
+
+    <div class="container">
+
+        <div class="video-header">
+            <div class="section-label">Watch Our Videos</div>
+
+            <h2 class="section-heading">
+                Explore <em>Divine Moments</em>
+            </h2>
+
+            <p class="video-subtitle">
+                Witness the purity and traditional craftsmanship
+            </p>
+        </div>
+
+        <!-- SLIDER WRAPPER -->
+        <div class="videos-slider-wrapper">
+
+            <!-- LEFT BUTTON -->
+            <button class="scroll-btn left-btn" id="scrollLeft">
+                &#10094;
+            </button>
+
+            <!-- VIDEOS -->
+            <div class="videos-scroll" id="videosScroll">
+
+                <!-- VIDEO 1 -->
+                <div class="video-card">
+
+                    <video class="reel-video" controls playsinline preload="metadata">
+                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
+                    </video>
+
+                    <div class="video-title">
+                        <h4>Pure Bhimseni Camphor</h4>
+                        <p>Premium A++ Grade</p>
+                    </div>
+
+                </div>
+
+                <!-- VIDEO 2 -->
+                <div class="video-card">
+
+                    <video class="reel-video" controls playsinline preload="metadata">
+                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
+                    </video>
+
+                    <div class="video-title">
+                        <h4>Traditional Craftsmanship</h4>
+                        <p>Temple Quality</p>
+                    </div>
+
+                </div>
+
+                <!-- VIDEO 3 -->
+                <div class="video-card">
+
+                    <video class="reel-video" controls playsinline preload="metadata">
+                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
+                    </video>
+
+                    <div class="video-title">
+                        <h4>Divine Aroma</h4>
+                        <p>Long Lasting Fragrance</p>
+                    </div>
+
+                </div>
+
+                <!-- VIDEO 4 -->
+                <div class="video-card">
+
+                    <video class="reel-video" controls playsinline preload="metadata">
+                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
+                    </video>
+
+                    <div class="video-title">
+                        <h4>Spiritual Essence</h4>
+                        <p>Pure Natural Product</p>
+                    </div>
+
+                </div>
+
+                <!-- VIDEO 5 -->
+                <div class="video-card">
+
+                    <video class="reel-video" controls playsinline preload="metadata">
+                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
+                    </video>
+
+                    <div class="video-title">
+                        <h4>Traditional Rituals</h4>
+                        <p>Authentic Bhimseni</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT BUTTON -->
+            <button class="scroll-btn right-btn" id="scrollRight">
+                &#10095;
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+.videos-gallery-section{
+    padding:80px 0;
+    background:#fdf6ec;
+    overflow:hidden;
+}
+
+.video-header{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.video-subtitle{
+    color:#777;
+    margin-top:10px;
+}
+
+/* WRAPPER */
+.videos-slider-wrapper{
+    position:relative;
+    display:flex;
+    align-items:center;
+}
+
+/* HORIZONTAL SCROLL */
+.videos-scroll{
+    display:flex;
+    gap:25px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+    width:100%;
+}
+
+.videos-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+/* CARD */
+.video-card{
+    min-width:320px;
+    max-width:320px;
+    flex:0 0 auto;
+}
+
+/* VIDEO */
+.reel-video{
+    width:100%;
+    height:560px;
+    object-fit:cover;
+    border-radius:22px;
+    background:#000;
+    box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+
+/* TITLE */
+.video-title{
+    text-align:center;
+    margin-top:14px;
+}
+
+.video-title h4{
+    font-size:20px;
+    color:#2b1810;
+    margin-bottom:5px;
+}
+
+.video-title p{
+    color:#777;
+    font-size:14px;
+}
+
+/* BUTTONS */
+.scroll-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:50%;
+    background:#c8873a;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    z-index:10;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+
+.scroll-btn:hover{
+    background:#a96d28;
+    transform:translateY(-50%) scale(1.08);
+}
+
+.left-btn{
+    left:-10px;
+}
+
+.right-btn{
+    right:-10px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .video-card{
+        min-width:240px;
+        max-width:240px;
+    }
+
+    .reel-video{
+        height:430px;
+    }
+
+    .scroll-btn{
+        width:40px;
+        height:40px;
+        font-size:18px;
+    }
+
+}
+
+</style>
+
+<script>
+
+const videosScroll = document.getElementById('videosScroll');
+
+document.getElementById('scrollRight').addEventListener('click', () => {
+    videosScroll.scrollBy({
+        left: 350,
+        behavior: 'smooth'
+    });
+});
+
+document.getElementById('scrollLeft').addEventListener('click', () => {
+    videosScroll.scrollBy({
+        left: -350,
+        behavior: 'smooth'
+    });
+});
+
+</script>
+
 <!-- SPECIALITY -->
 <section class="spec section-pad" id="speciality">
     <div class="container">
