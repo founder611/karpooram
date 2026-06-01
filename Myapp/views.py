@@ -258,7 +258,7 @@ def emailenquiry(request):
         subject = "ECOMONKS Subscription"
 
         message = f"""
-🌿 Welcome to ECOMONKS 🌿
+Welcome to ECOMONKS
 
 Hello,
 
@@ -285,7 +285,7 @@ Thank you for staying connected with us.
 We look forward to serving you with the best from ECOMONKS.
 
 Warm Regards,
-🌿 Team ECOMONKS
+Team ECOMONKS
 """
 
         try:
