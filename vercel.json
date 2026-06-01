@@ -1,9 +1,21 @@
+```json id="6dj6is"
 {
   "version": 2,
   "builds": [
     {
       "src": "karpooram/wsgi.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.12"
+      }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles"
+      }
     }
   ],
   "routes": [
@@ -17,3 +29,4 @@
     }
   ]
 }
+```
