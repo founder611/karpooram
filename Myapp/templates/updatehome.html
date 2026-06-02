@@ -967,8 +967,6 @@
 </section>
 
 
-{% load static %}
-
 <section class="videos-gallery-section" id="videos">
 
     <div class="container">
@@ -998,72 +996,97 @@
 
                 <!-- VIDEO 1 -->
                 <div class="video-card">
-
-                    <video class="reel-video" controls playsinline preload="metadata">
-                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
-                    </video>
-
+                    <div class="youtube-embed">
+                        <iframe 
+                            width="100%" 
+                            height="560" 
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_1" 
+                            title="Pure Bhimseni Camphor" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                     <div class="video-title">
                         <h4>Pure Bhimseni Camphor</h4>
                         <p>Premium A++ Grade</p>
                     </div>
-
                 </div>
 
                 <!-- VIDEO 2 -->
                 <div class="video-card">
-
-                    <video class="reel-video" controls playsinline preload="metadata">
-                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
-                    </video>
-
+                    <div class="youtube-embed">
+                        <iframe 
+                            width="100%" 
+                            height="560" 
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_2" 
+                            title="Traditional Craftsmanship" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                     <div class="video-title">
                         <h4>Traditional Craftsmanship</h4>
                         <p>Temple Quality</p>
                     </div>
-
                 </div>
 
                 <!-- VIDEO 3 -->
                 <div class="video-card">
-
-                    <video class="reel-video" controls playsinline preload="metadata">
-                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
-                    </video>
-
+                    <div class="youtube-embed">
+                        <iframe 
+                            width="100%" 
+                            height="560" 
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_3" 
+                            title="Divine Aroma" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                     <div class="video-title">
                         <h4>Divine Aroma</h4>
                         <p>Long Lasting Fragrance</p>
                     </div>
-
                 </div>
 
                 <!-- VIDEO 4 -->
                 <div class="video-card">
-
-                    <video class="reel-video" controls playsinline preload="metadata">
-                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
-                    </video>
-
+                    <div class="youtube-embed">
+                        <iframe 
+                            width="100%" 
+                            height="560" 
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_4" 
+                            title="Spiritual Essence" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                     <div class="video-title">
                         <h4>Spiritual Essence</h4>
                         <p>Pure Natural Product</p>
                     </div>
-
                 </div>
 
                 <!-- VIDEO 5 -->
                 <div class="video-card">
-
-                    <video class="reel-video" controls playsinline preload="metadata">
-                        <source src="{% static 'homepage/img/video.mp4' %}" type="video/mp4">
-                    </video>
-
+                    <div class="youtube-embed">
+                        <iframe 
+                            width="100%" 
+                            height="560" 
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID_5" 
+                            title="Traditional Rituals" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                     <div class="video-title">
                         <h4>Traditional Rituals</h4>
                         <p>Authentic Bhimseni</p>
                     </div>
-
                 </div>
 
             </div>
@@ -1126,14 +1149,24 @@
     flex:0 0 auto;
 }
 
-/* VIDEO */
-.reel-video{
-    width:100%;
-    height:560px;
-    object-fit:cover;
-    border-radius:22px;
-    background:#000;
-    box-shadow:0 12px 30px rgba(0,0,0,0.2);
+/* YOUTUBE EMBED RESPONSIVE */
+.youtube-embed{
+    position: relative;
+    width: 100%;
+    height: 560px;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.youtube-embed iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 /* TITLE */
@@ -1192,8 +1225,8 @@
         max-width:240px;
     }
 
-    .reel-video{
-        height:430px;
+    .youtube-embed{
+        height: 430px;
     }
 
     .scroll-btn{
@@ -1225,6 +1258,7 @@ document.getElementById('scrollLeft').addEventListener('click', () => {
 });
 
 </script>
+
 
 <!-- SPECIALITY -->
 <section class="spec section-pad" id="speciality">
