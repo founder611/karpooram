@@ -342,29 +342,45 @@ def userpayment_post(request):
 
 
 # ==========================================
-# SAVE ORDER TO EXCEL
+# SAVE ORDER TO SUPABASE
 # ==========================================
 from supabase import create_client
-import os
 from datetime import datetime
 
 def save_order_to_excel(name, email, phone, address, quantity, payment_id):
-    supabase = create_client(
-        os.environ.get('https://fgikrpxjaskyduewekiu.supabase.co'),
-        os.environ.get('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaWtycHhqYXNreWR1ZXdla2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTg3MDUsImV4cCI6MjA5NTkzNDcwNX0.kyIphJzU-gNIEvA2rXAWAKy6lC4Vur362U2lFWm6BtI')
-    )
-    
-    supabase.table('orders').insert({
-        "order_no": ...,
-        "date": datetime.now().isoformat(),
-        "customer_name": name,
-        "email": email,
-        "phone": phone,
-        "address": address,
-        "quantity": quantity,
-        "payment_id": payment_id
-    }).execute()
-
+    try:
+        # Your Supabase credentials - DIRECTLY (not from environment)
+        supabase_url = "https://fgikrpxjaskyduewekiu.supabase.co"
+        supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaWtycHhqYXNreWR1ZXdla2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTg3MDUsImV4cCI6MjA5NTkzNDcwNX0.kyIphJzU-gNIEvA2rXAWAKy6lC4Vur362U2lFWm6BtI"
+        
+        # Create client
+        supabase = create_client(supabase_url, supabase_key)
+        
+        # Get next order number
+        try:
+            result = supabase.table('orders').select('order_no', count='exact').execute()
+            order_no = result.count + 1 if result.count else 1
+        except:
+            order_no = 1
+        
+        # Insert order
+        supabase.table('orders').insert({
+            "order_no": order_no,
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "customer_name": name,
+            "email": email,
+            "phone": phone,
+            "address": address,
+            "quantity": quantity,
+            "payment_id": payment_id
+        }).execute()
+        
+        print(f"✅ Order #{order_no} saved to Supabase")
+        return True
+        
+    except Exception as e:
+        print(f"❌ Supabase error: {e}")
+        return False
 
 
 # ==========================================
