@@ -344,57 +344,26 @@ def userpayment_post(request):
 # ==========================================
 # SAVE ORDER TO EXCEL
 # ==========================================
+from supabase import create_client
+import os
+from datetime import datetime
 
 def save_order_to_excel(name, email, phone, address, quantity, payment_id):
-
-    file_path = "orders.xlsx"
-
-    # File illa engil create cheyyum
-    if not os.path.exists(file_path):
-
-        workbook = Workbook()
-        sheet = workbook.active
-        sheet.title = "Orders"
-
-        # Heading Row
-        sheet.append([
-            "Order No",
-            "Date",
-            "Customer Name",
-            "Email",
-            "Phone",
-            "Address",
-            "Quantity",
-            "Payment ID"
-        ])
-
-        workbook.save(file_path)
-
-    # Existing workbook open cheyyuka
-    workbook = load_workbook(file_path)
-    sheet = workbook.active
-
-    # Next Order Number
-    order_no = sheet.max_row
-
-    # Current Date Time
-    current_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    # Add Row
-    sheet.append([
-        order_no,
-        current_date,
-        name,
-        email,
-        phone,
-        address,
-        quantity,
-        payment_id
-    ])
-
-    workbook.save(file_path)
-
-
+    supabase = create_client(
+        os.environ.get('https://fgikrpxjaskyduewekiu.supabase.co/rest/v1/'),
+        os.environ.get('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaWtycHhqYXNreWR1ZXdla2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTg3MDUsImV4cCI6MjA5NTkzNDcwNX0.kyIphJzU-gNIEvA2rXAWAKy6lC4Vur362U2lFWm6BtI')
+    )
+    
+    supabase.table('orders').insert({
+        "order_no": ...,
+        "date": datetime.now().isoformat(),
+        "customer_name": name,
+        "email": email,
+        "phone": phone,
+        "address": address,
+        "quantity": quantity,
+        "payment_id": payment_id
+    }).execute()
 
 
 
