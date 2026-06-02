@@ -832,7 +832,7 @@ def userpayment_post(request):
         
         # 3. Send WhatsApp (non-critical)
         try:
-            send_whbatsapp_message(name, phone, quantity)
+            send_whatsapp_message(name, phone, quantity)
         except Exception as e:
             print(f"❌ WhatsApp error: {str(e)}")
         
