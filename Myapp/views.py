@@ -350,7 +350,7 @@ from datetime import datetime
 
 def save_order_to_excel(name, email, phone, address, quantity, payment_id):
     supabase = create_client(
-        os.environ.get('https://fgikrpxjaskyduewekiu.supabase.co/rest/v1/'),
+        os.environ.get('https://fgikrpxjaskyduewekiu.supabase.co'),
         os.environ.get('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZnaWtycHhqYXNreWR1ZXdla2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTg3MDUsImV4cCI6MjA5NTkzNDcwNX0.kyIphJzU-gNIEvA2rXAWAKy6lC4Vur362U2lFWm6BtI')
     )
     
