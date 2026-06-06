@@ -725,19 +725,14 @@ def send_whatsapp_message(name, phone, quantity):
         payload = {
             "template_name": "order_confirmation",
             "broadcast_name": "order_confirmation",
-            "receivers": [
+            "parameters": [
                 {
-                    "whatsappNumber": f"91{phone}",
-                    "customParams": [
-                        {
-                            "name": "1",
-                            "value": str(name)
-                        },
-                        {
-                            "name": "2",
-                            "value": str(quantity)
-                        }
-                    ]
+                    "name": "1",
+                    "value": str(name)
+                },
+                {
+                    "name": "2",
+                    "value": str(quantity)
                 }
             ]
         }
