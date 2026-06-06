@@ -709,7 +709,7 @@ def send_whatsapp_message(name, phone, quantity):
         phone = phone.replace(" ", "").replace("+91", "")
         
         # Fix the URL - the '12345' looks suspicious, replace with your actual instance ID
-        url = f"https://live-mt-server.wati.io/12345/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
+        url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
         
         payload = {
             "template_name": "order_confirmation",
