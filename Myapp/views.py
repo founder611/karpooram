@@ -608,7 +608,7 @@ import requests
 from supabase import create_client
 
 def homepage(request):
-    return render(request, 'updatehome.html')
+    return render(request, 'newhome.html')
 
 def order_post(request):
     name = request.POST['name']
