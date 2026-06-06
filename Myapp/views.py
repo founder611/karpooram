@@ -715,7 +715,6 @@ def send_whatsapp_message(name, phone, quantity):
         url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
 
 
-        print("PAYLOAD:", payload)
 
         headers = {
             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwibmFtZWlkIjoicHJlbXNla2hhckB5YXRoaXNoYS5jb20iLCJlbWFpbCI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwiYXV0aF90aW1lIjoiMDYvMDYvMjAyNiAxNzoxOToxNCIsInRlbmFudF9pZCI6IjEwNDM0NTMiLCJkYl9uYW1lIjoibXQtcHJvZC1UZW5hbnRzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.i7aQp3cYOtk2wraWyMjHLP7L0T8znm-xf7SthfOPvZ4",
@@ -736,6 +735,8 @@ def send_whatsapp_message(name, phone, quantity):
                 }
             ]
         }
+        print("PAYLOAD:", payload)
+
 
         response = requests.post(
             url,
@@ -748,7 +749,7 @@ def send_whatsapp_message(name, phone, quantity):
         print("RESPONSE TEXT:", response.text)
         print("===================================")
 
-        return True
+        return response.status_code == 200
 
     except Exception as e:
         print("WhatsApp Error:", str(e))
