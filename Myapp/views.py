@@ -704,33 +704,92 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id):
 # SEND WHATSAPP MESSAGE
 # ==========================================
 
+# def send_whatsapp_message(name, phone, quantity):
+#     try:
+#         print("========== WHATSAPP FUNCTION STARTED ==========")
+
+
+#         # phone = str(phone).replace(" ", "").replace("+91", "").strip()
+
+#         phone = str(phone).replace(" ", "").replace("+", "").strip()
+
+#         if phone.startswith("91"):
+#             final_phone = phone
+#         else:
+#             final_phone = f"91{phone}"
+
+#         print("PHONE:", phone)
+#         print("FINAL PHONE:", final_phone)
+
+
+#         url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber={final_phone}"
+
+
+
+#         headers = {
+#             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwibmFtZWlkIjoicHJlbXNla2hhckB5YXRoaXNoYS5jb20iLCJlbWFpbCI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwiYXV0aF90aW1lIjoiMDYvMDYvMjAyNiAxNzoxOToxNCIsInRlbmFudF9pZCI6IjEwNDM0NTMiLCJkYl9uYW1lIjoibXQtcHJvZC1UZW5hbnRzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.i7aQp3cYOtk2wraWyMjHLP7L0T8znm-xf7SthfOPvZ4",
+#             "Content-Type": "application/json"
+#         }
+
+#         payload = {
+#             "template_name": "order_confirmation",
+#             "broadcast_name": "order_confirmation",
+#             "parameters": [
+#                 {
+#                     "name": "1",
+#                     "value": str(name)
+#                 },
+#                 {
+#                     "name": "2",
+#                     "value": str(quantity)
+#                 }
+#             ]
+#         }
+
+#         print("PAYLOAD:", payload)
+
+
+#         response = requests.post(
+#             url,
+#             json=payload,
+#             headers=headers
+#         )
+
+#         print("========== WATI RESPONSE ==========")
+#         print("STATUS CODE:", response.status_code)
+#         print("RESPONSE TEXT:", response.text)
+#         print("===================================")
+
+#         return response.status_code == 200
+
+#     except Exception as e:
+#         print("WhatsApp Error:", str(e))
+#         return False
+   
+
+
+
 def send_whatsapp_message(name, phone, quantity):
     try:
+
         print("========== WHATSAPP FUNCTION STARTED ==========")
 
-
-        # phone = str(phone).replace(" ", "").replace("+91", "").strip()
-
+        # Clean phone number
         phone = str(phone).replace(" ", "").replace("+", "").strip()
 
-        if phone.startswith("91"):
-            final_phone = phone
-        else:
-            final_phone = f"91{phone}"
+        # Add country code if missing
+        if not phone.startswith("91"):
+            phone = f"91{phone}"
 
-        print("PHONE:", phone)
-        print("FINAL PHONE:", final_phone)
+        print("FINAL PHONE:", phone)
+
+        # WATI API URL
+        # url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber={phone}"
+        
+        url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber={phone}"
 
 
-        url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber={final_phone}"
-
-
-
-        headers = {
-            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwibmFtZWlkIjoicHJlbXNla2hhckB5YXRoaXNoYS5jb20iLCJlbWFpbCI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwiYXV0aF90aW1lIjoiMDYvMDYvMjAyNiAxNzoxOToxNCIsInRlbmFudF9pZCI6IjEwNDM0NTMiLCJkYl9uYW1lIjoibXQtcHJvZC1UZW5hbnRzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.i7aQp3cYOtk2wraWyMjHLP7L0T8znm-xf7SthfOPvZ4",
-            "Content-Type": "application/json"
-        }
-
+        # Payload
         payload = {
             "template_name": "order_confirmation",
             "broadcast_name": "order_confirmation",
@@ -746,76 +805,34 @@ def send_whatsapp_message(name, phone, quantity):
             ]
         }
 
-        # payload = { 
-        #     "template_name": "order_confirmation", 
-        #     "broadcast_name": "order_confirmation", 
-        #     "receivers": 
-        #     [ 
-        #         {
-        #              "whatsappNumber": f"91{phone}", 
-        #              "customParams": 
-        #              [ 
-        #                 { 
-        #                     "name": "1", 
-        #                     "value": str(name)
-        #                 }, 
-        #                 { 
-        #                     "name": "2", 
-        #                     "value": str(quantity) 
-        #                 } 
-        #             ] 
-        #         } 
-        #     ] 
-        # }
         print("PAYLOAD:", payload)
 
+        # Headers
+        headers = {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwibmFtZWlkIjoicHJlbXNla2hhckB5YXRoaXNoYS5jb20iLCJlbWFpbCI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwiYXV0aF90aW1lIjoiMDYvMDYvMjAyNiAxNzoxOToxNCIsInRlbmFudF9pZCI6IjEwNDM0NTMiLCJkYl9uYW1lIjoibXQtcHJvZC1UZW5hbnRzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.i7aQp3cYOtk2wraWyMjHLP7L0T8znm-xf7SthfOPvZ4",
+            "Content-Type": "application/json"
+        }
 
+        # Send request
         response = requests.post(
             url,
             json=payload,
-            headers=headers
+            headers=headers,
+            timeout=30
         )
 
         print("========== WATI RESPONSE ==========")
         print("STATUS CODE:", response.status_code)
-        print("RESPONSE TEXT:", response.text)
+        print("RESPONSE:", response.text)
         print("===================================")
 
         return response.status_code == 200
 
     except Exception as e:
+
         print("WhatsApp Error:", str(e))
         return False
-    
-# def send_whatsapp_message(name, phone, quantity):
-#     try:
-#         # Remove spaces and +91
-#         phone = phone.replace(" ", "").replace("+91", "")
-        
-#         # Fix the URL - the '12345' looks suspicious, replace with your actual instance ID
-#         url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
-        
-#         payload = {
-#             "template_name": "order_confirmation",
-#             "broadcast_name": "order_confirmation",
-#             "parameters": [
-#                 {"name": "name", "value": name},
-#                 {"name": "quantity", "value": quantity}
-#             ]
-#         }
-        
-#         headers = {
-#             "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwibmFtZWlkIjoicHJlbXNla2hhckB5YXRoaXNoYS5jb20iLCJlbWFpbCI6InByZW1zZWtoYXJAeWF0aGlzaGEuY29tIiwiYXV0aF90aW1lIjoiMDYvMDYvMjAyNiAxNzoxOToxNCIsInRlbmFudF9pZCI6IjEwNDM0NTMiLCJkYl9uYW1lIjoibXQtcHJvZC1UZW5hbnRzIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQURNSU5JU1RSQVRPUiIsImV4cCI6MjUzNDAyMzAwODAwLCJpc3MiOiJDbGFyZV9BSSIsImF1ZCI6IkNsYXJlX0FJIn0.i7aQp3cYOtk2wraWyMjHLP7L0T8znm-xf7SthfOPvZ4",
-#             "Content-Type": "application/json"
-#         }
-        
-#         response = requests.post(url, json=payload, headers=headers, timeout=10)
-#         print(f"WhatsApp response: {response.status_code}")
-#         return True
-        
-#     except Exception as e:
-#         print(f"WhatsApp Error: {str(e)}")
-#         return False
+
 
 # ==========================================
 # USER PAYMENT POST - MAIN FUNCTION
