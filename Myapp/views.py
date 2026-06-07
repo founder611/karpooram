@@ -721,19 +721,41 @@ def send_whatsapp_message(name, phone, quantity):
             "Content-Type": "application/json"
         }
 
-        payload = {
-            "template_name": "order_confirmation",
-            "broadcast_name": "order_confirmation",
-            "parameters": [
+        # payload = {
+        #     "template_name": "order_confirmation",
+        #     "broadcast_name": "order_confirmation",
+        #     "parameters": [
+        #         {
+        #             "name": "1",
+        #             "value": str(name)
+        #         },
+        #         {
+        #             "name": "2",
+        #             "value": str(quantity)
+        #         }
+        #     ]
+        # }
+
+        payload = { 
+            "template_name": "order_confirmation", 
+            "broadcast_name": "order_confirmation", 
+            "receivers": 
+            [ 
                 {
-                    "name": "1",
-                    "value": str(name)
-                },
-                {
-                    "name": "2",
-                    "value": str(quantity)
-                }
-            ]
+                     "whatsappNumber": f"91{phone}", 
+                     "customParams": 
+                     [ 
+                        { 
+                            "name": "1", 
+                            "value": str(name)
+                        }, 
+                        { 
+                            "name": "2", 
+                            "value": str(quantity) 
+                        } 
+                    ] 
+                } 
+            ] 
         }
         print("PAYLOAD:", payload)
 
