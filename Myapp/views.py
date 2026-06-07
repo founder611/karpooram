@@ -709,10 +709,20 @@ def send_whatsapp_message(name, phone, quantity):
         print("========== WHATSAPP FUNCTION STARTED ==========")
 
 
-        phone = str(phone).replace(" ", "").replace("+91", "").strip()
-        print("PHONE:", phone)
+        # phone = str(phone).replace(" ", "").replace("+91", "").strip()
 
-        url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber=91{phone}"
+        phone = str(phone).replace(" ", "").replace("+", "").strip()
+
+        if phone.startswith("91"):
+            final_phone = phone
+        else:
+            final_phone = f"91{phone}"
+
+        print("PHONE:", phone)
+        print("FINAL PHONE:", final_phone)
+
+
+        url = f"https://live-mt-server.wati.io/1043453/api/v1/sendTemplateMessage?whatsappNumber={final_phone}"
 
 
 
