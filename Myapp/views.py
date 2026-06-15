@@ -619,7 +619,7 @@ def order_post(request):
 
     if quantity == "50g":
         amount = 1 * 100
-    elif quantity == "200g":
+    elif quantity == "175g":
         amount = 1 * 100
     else:
         amount = 0
