@@ -610,6 +610,10 @@ from supabase import create_client
 def homepage(request):
     return render(request, 'newhome.html')
 
+
+def blog_page(request):
+    return render(request,'blog.html')
+
 def order_post(request):
     name = request.POST['name']
     email = request.POST['email']

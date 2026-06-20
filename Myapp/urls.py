@@ -10,4 +10,5 @@ urlpatterns = [
     path('raz_pay/<amount>', views.raz_pay),
     path('userpayment_post/', views.userpayment_post),
     path('emailenquiry/', views.emailenquiry),
+    path('blog/', views.blog_page),
 ]
