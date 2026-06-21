@@ -615,6 +615,17 @@ def blog_page(request):
     return render(request,'blog.html')
 
 def order_post(request):
+
+
+    otp_verified = request.POST.get(
+            'otp_verified'
+        )
+
+    if otp_verified != "true":
+        return HttpResponse(
+            "Please verify OTP first"
+        )
+
     name = request.POST['name']
     email = request.POST['email']
     phone = request.POST['phone']
