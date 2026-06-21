@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import TemplateView
 
 from Myapp import views
 
@@ -11,4 +12,11 @@ urlpatterns = [
     path('userpayment_post/', views.userpayment_post),
     path('emailenquiry/', views.emailenquiry),
     path('blog/', views.blog_page),
+     path(
+        "googleca06e218bc89f31c.html",
+        TemplateView.as_view(
+            template_name="googleca06e218bc89f31c.html",
+            content_type="text/html"
+        ),
+    ),
 ]
