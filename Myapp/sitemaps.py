@@ -1,11 +1,11 @@
 from django.contrib.sitemaps import Sitemap
 
 class StaticSitemap(Sitemap):
-    changefreq = "weekly"
     priority = 0.8
+    changefreq = "weekly"
 
     def items(self):
-        return ['', '/blog/']
+        return ['/', '/blog/']
 
     def location(self, item):
         return item

@@ -2,8 +2,12 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.sitemaps.views import sitemap
-from Myapp import sitemaps
+from Myapp.sitemaps import StaticSitemap
 from Myapp import views
+
+sitemaps = {
+    'static': StaticSitemap,
+}
 
 urlpatterns = [
     path("admin/", admin.site.urls),
