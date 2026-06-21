@@ -29,5 +29,6 @@ urlpatterns = [
     sitemap,
     {'sitemaps': sitemaps},
     name='sitemap'
-),
+    ),
+    path("robots.txt", views.robots_txt),
 ]
