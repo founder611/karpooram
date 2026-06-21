@@ -19,6 +19,8 @@
     <link rel="canonical"
           href="https://www.ecomonks.in/blog/best-edible-camphor-in-kerala/">
 
+    <link rel="icon" type="image/jpeg" href="{% static 'homepage/img/logo.jpeg' %}">
+
     <!-- Open Graph -->
     <meta property="og:title"
           content="Best Edible Camphor in Kerala | Pure Bhimseni Karpooram">
@@ -35,7 +37,25 @@
     <meta property="og:url"
           content="https://www.ecomonks.in/blog/best-edible-camphor-in-kerala/">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <style>
+
+        :root {
+            --amber:    #C8873A;
+            --amber-lt: #E8B46A;
+            --brown:    #2B1810;
+            --brown-md: #4A2C1A;
+            --cream:    #FDF6EC;
+            --cream-dk: #F5EBD8;
+            --text:     #3D2010;
+            --muted:    #7A5C3E;
+            --white:    #FFFFFF;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
 
         body{
             font-family:Arial, sans-serif;
@@ -45,16 +65,114 @@
             background:#fdf8f2;
         }
 
+        img { max-width: 100%; }
+
+        /* ── NAVBAR (matches product pages) ── */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(43,24,16,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            border-bottom: 1px solid rgba(200,135,58,0.25);
+            transition: background .3s;
+        }
+        .navbar.scrolled { background: rgba(43,24,16,0.99); }
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .navbar-brand img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--amber);
+        }
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem; font-weight: 600;
+            color: var(--amber); letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            list-style: none;
+            margin: 0; padding: 0;
+        }
+        .nav-links a {
+            display: block; padding: 8px 12px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.78rem; font-weight: 500;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            border-radius: 4px;
+            transition: color .2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--amber); }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer; padding: 4px;
+            background: none; border: none;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: var(--amber); border-radius: 2px;
+            transition: transform .3s, opacity .3s;
+        }
+        .hamburger.open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2){ opacity: 0; }
+        .hamburger.open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+        .mobile-nav {
+            display: none; position: fixed;
+            top: 64px; left: 0; right: 0;
+            background: var(--brown);
+            padding: 16px 20px 20px;
+            border-bottom: 1px solid rgba(200,135,58,0.2);
+            z-index: 999;
+            animation: slideDown .25s ease;
+        }
+        @keyframes slideDown{ from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none} }
+        .mobile-nav.open { display: block; }
+        .mobile-nav a {
+            display: block; padding: 13px 4px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 0.9rem; font-weight: 500;
+            letter-spacing: 1px; text-transform: uppercase;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .mobile-nav a:last-child { border-bottom: none; }
+        .mobile-nav a:hover { color: var(--amber); }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+        }
+
+        /* push content below fixed navbar */
         .hero{
             background:#2B1810;
             color:white;
             text-align:center;
-            padding:80px 20px;
+            padding:144px 20px 80px;
         }
 
         .hero h1{
             font-size:48px;
             margin-bottom:20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
         }
 
         .hero p{
@@ -114,19 +232,126 @@
             color:#8a5a00;
         }
 
-        footer{
-            background:#2B1810;
-            color:white;
-            text-align:center;
-            padding:30px;
-            margin-top:50px;
+        /* ── FOOTER (matches product pages) ── */
+        .footer { background: var(--brown); color: rgba(255,255,255,0.7); padding: 60px 0 0; margin-top: 50px; }
+        .footer-container { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+        .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.4fr; gap: 44px; }
+        .footer-col h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem; font-weight: 600;
+            color: var(--white); margin-bottom: 18px;
+            letter-spacing: 2px; text-transform: uppercase;
         }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px; margin-bottom: 14px;
+        }
+        .footer-brand img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--amber); object-fit: cover; }
+        .footer-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem; font-weight: 600;
+            color: var(--amber); letter-spacing: 3px;
+        }
+        .footer-col p { font-size: 0.85rem; line-height: 1.8; margin-bottom: 18px; }
+        .footer-contact-item {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.85rem; margin-bottom: 11px;
+        }
+        .footer-contact-item i { color: var(--amber); margin-top: 3px; flex-shrink: 0; }
+        .footer-hours dt { font-size: 0.8rem; font-weight: 500; color: var(--white); letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+        .footer-hours dd { font-size: 0.85rem; margin: 2px 0 0 0; }
+        .social-links {
+            display: flex;
+            gap: 10px; margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            width: 36px; height: 36px;
+            border: 1px solid rgba(200,135,58,0.3); border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.82rem;
+            transition: background .2s, border-color .2s, color .2s;
+        }
+        .social-link:hover { background: var(--amber); border-color: var(--amber); color: var(--brown); }
+        .footer-bottom {
+            margin-top: 44px; padding: 18px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px; font-size: 0.8rem;
+            max-width: 1140px;
+            margin-left: auto; margin-right: auto;
+            padding-left: 20px; padding-right: 20px;
+        }
+        .footer-bottom span { color: var(--amber); }
+
+        @media (max-width: 1100px) {
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+        }
+        @media (max-width: 640px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+            .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
+            .hero { padding: 124px 16px 60px; }
+            .hero h1 { font-size: 34px; }
+        }
+
+        /* ── BACK TO TOP ── */
+        .back-top {
+            position: fixed; bottom: 22px; right: 22px; z-index: 900;
+            width: 42px; height: 42px;
+            background: var(--amber); color: var(--brown);
+            border: none; border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; font-size: 1rem;
+            box-shadow: 0 4px 16px rgba(200,135,58,0.4);
+            transition: transform .2s, background .2s;
+        }
+        .back-top:hover { background: var(--amber-lt); transform: translateY(-3px); }
+        .back-top.visible { display: flex; }
 
     </style>
 
 </head>
 
 <body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <a href="/karpooram/" class="navbar-brand">
+        <img src="{% static 'homepage/img/logo.jpeg' %}" alt="Ecomonks logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/C8873A/FDF6EC?text=EC'">
+        <span class="brand-name">Ecomonks</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="/karpooram/">Home</a></li>
+        <li><a href="/karpooram/#about">About</a></li>
+        <li><a href="/karpooram/#gallery">Gallery</a></li>
+        <li><a href="/blog/" class="active">Blog</a></li>
+        <li><a href="/karpooram/#testimonials">Reviews</a></li>
+        <li><a href="/karpooram/#footer">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="mobile-nav" id="mobileNav">
+    <a href="/karpooram/">Home</a>
+    <a href="/karpooram/#about">About</a>
+    <a href="/karpooram/#gallery">Gallery</a>
+    <a href="/blog/">Blog</a>
+    <a href="/karpooram/#testimonials">Testimonials</a>
+    <a href="/karpooram/#order">Order</a>
+    <a href="/karpooram/#footer">Contact</a>
+</div>
 
 <section class="hero">
 
@@ -227,6 +452,7 @@
             natural fragrance and unmatched purity.
         </p>
 
+        <a href="/karpooram/#order" class="btn">Shop Karpooram Now</a>
 
     </div>
 
@@ -259,16 +485,87 @@
 
 </div>
 
-<footer>
-
-    <h3>Ecomonks</h3>
-
-    <p>
-        Premium Spiritual Products | Pure Bhimseni Karpooram |
-        Temple Grade Quality
-    </p>
-
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-brand">
+                    <img src="{% static 'homepage/img/logo.jpeg' %}" alt="Ecomonks logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/C8873A/FDF6EC?text=EC'">
+                    <span>ECOMONKS</span>
+                </div>
+                <p>Premium quality edible karpooram crafted with purity, tradition, and authenticity. Trusted by generations.</p>
+                <div class="social-links">
+                    <a class="social-link" href="#" aria-label="Ecomonks on Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a class="social-link" href="#" aria-label="Ecomonks on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a class="social-link" href="#" aria-label="Ecomonks on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a class="social-link" href="#" aria-label="Ecomonks on YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <div class="footer-contact-item"><i class="fa fa-map-marker-alt"></i><span>Yathisha Bliss No 9/329, Moorkanikkara Kozhukully PO, Thrissur 680752, Kerala, India</span></div>
+                <div class="footer-contact-item"><i class="fa fa-phone-alt"></i><span>+91 9845736584</span></div>
+                <div class="footer-contact-item"><i class="fa fa-envelope"></i><span>Founder@ecomonks.in</span></div>
+            </div>
+            <div class="footer-col">
+                <h4>Working Hours</h4>
+                <dl class="footer-hours">
+                    <dt>Monday – Saturday</dt><dd>24*7 Hours</dd>
+                    <dt>Sunday</dt><dd>Also available</dd>
+                </dl>
+            </div>
+            <div class="footer-col">
+                <h4>Subscribe</h4>
+                <p>Get updates, offers, and the latest product information straight to your inbox.</p>
+                <form method="POST" action="/emailenquiry/">
+                    {% csrf_token %}
+                    <div style="display:flex;gap:0;margin-top:12px;">
+                        <input type="email" name="email" placeholder="Your email address" required
+                               style="flex:1;padding:11px 14px;font-family:'Jost',sans-serif;font-size:0.84rem;color:#fff;background:rgba(255,255,255,0.08);border:1px solid rgba(200,135,58,0.25);border-right:none;border-radius:4px 0 0 4px;outline:none;min-width:0;">
+                        <button type="submit"
+                                style="padding:11px 16px;background:var(--amber);border:none;color:var(--brown);font-size:0.78rem;font-weight:600;cursor:pointer;border-radius:0 4px 4px 0;white-space:nowrap;">Go</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2025 <span>ECOMONKS</span>. All Rights Reserved.</p>
+            <p>Designed with ❤️ for Pure Edible Karpooram</p>
+        </div>
+    </div>
 </footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top">
+    <i class="fa fa-angle-up"></i>
+</button>
+
+<script>
+    /* Navbar scroll */
+    var navbar  = document.getElementById('navbar');
+    var backTop = document.getElementById('backTop');
+    window.addEventListener('scroll', function() {
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+        backTop.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+    backTop.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* Hamburger */
+    var ham       = document.getElementById('hamburger');
+    var mobileNav = document.getElementById('mobileNav');
+    ham.addEventListener('click', function() {
+        ham.classList.toggle('open');
+        mobileNav.classList.toggle('open');
+    });
+    mobileNav.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() {
+            ham.classList.remove('open');
+            mobileNav.classList.remove('open');
+        });
+    });
+</script>
 
 </body>
 </html>
