@@ -1887,61 +1887,7 @@
             </div>
             <div class="order-form">
                 <h3>Order Now</h3>
-                <form id="orderForm" method="post" action="order_post/">
-                    {% csrf_token %}
-
-                    <div class="form-field">
-                        <input type="text" name="name" id="name" placeholder="Your Full Name" required>
-                    </div>
-
-                    <div class="form-field">
-                        <input type="email" name="email" id="email" placeholder="Email Address" required>
-                    </div>
-
-                    <div class="form-field">
-                        <input type="tel" name="phone" id="phone" placeholder="WhatsApp Number" required>
-                    </div>
-
-                    <div class="form-field">
-                        <input type="text" name="address" id="address" placeholder="Delivery Address" required>
-                    </div>
-
-                    <div class="form-field">
-                        <select name="quantity" id="quantity" required>
-                            <option value="">Select Quantity</option>
-                            <option value="50g">50g Pack</option>
-                            <option value="175g">175g Pack</option>
-                        </select>
-                    </div>
-
-                    <button type="button" id="sendOTP">
-                        Verify WhatsApp
-                    </button>
-
-                    <div id="otpSection" style="display:none;">
-
-                        <input
-                            type="text"
-                            id="otp"
-                            placeholder="Enter OTP">
-
-                        <button type="button" id="verifyOTP">
-                            Verify OTP
-                        </button>
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        id="buyBtn"
-                        disabled>
-
-                        Buy Now
-
-                    </button>
-
-                </form>
-                <!-- <form method="post" action="order_post/">
+                <form method="post" action="order_post/">
                     {% csrf_token %}
                     <div class="form-field"><input type="text" name="name" placeholder="Your Full Name" required></div>
                     <div class="form-field"><input type="email" name="email" placeholder="Email Address" required></div>
@@ -1955,7 +1901,7 @@
                         </select>
                     </div>
                     <button type="submit" class="btn-submit">Buy Now</button>
-                </form> -->
+                </form>
             </div>
         </div>
     </div>
