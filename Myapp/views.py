@@ -713,13 +713,13 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
 
 import requests
 from datetime import datetime
-import json
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
-    """
-    FINAL FIXED VERSION - Testing all authentication methods
-    """
+    """Updated version with proper API key from dashboard"""
     try:
+        # ⚠️ REPLACE THIS WITH YOUR NEW API KEY FROM DASHBOARD
+        API_KEY = "25cb234a7f65dcc72c4fba62cba6496a"  # <--- PASTE YOUR NEW KEY HERE!
+        
         # Clean phone
         phone = str(phone).replace(" ", "").replace("+", "").strip()
         if not phone.startswith("91"):
@@ -743,126 +743,46 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
             }
         }
 
-        print("📤 Sending WhatsApp Template...")
-        print(f"📱 To: {phone}")
+        print(f"📤 Sending to: {phone}")
         print(f"📝 Template: karpooram_orderconfirmation")
-        print(f"📦 Variables: {payload['variables']['body']}")
+        print(f"🔑 API Key: {API_KEY[:10]}...{API_KEY[-10:]}")
 
-        # TRY MULTIPLE AUTHENTICATION METHODS
-        auth_configs = [
-            # Method 1: x-api-key header (as per documentation)
-            {
-                "name": "x-api-key header",
-                "headers": {
-                    "Content-Type": "application/json",
-                    "x-api-key": "ded0fe99217e8a35606cb6d39e0246f1",
-                    "Accept": "application/json"
-                }
+        response = requests.post(
+            "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": API_KEY,  # Use the new key
+                "Accept": "application/json"
             },
-            # Method 2: Authorization Bearer
-            {
-                "name": "Bearer token",
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer ded0fe99217e8a35606cb6d39e0246f1",
-                    "Accept": "application/json"
-                }
-            },
-            # Method 3: API key as query parameter
-            {
-                "name": "Query param",
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                "params": {
-                    "api_key": "ded0fe99217e8a35606cb6d39e0246f1"
-                }
-            },
-            # Method 4: API key as query parameter with different name
-            {
-                "name": "Query param (apikey)",
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                "params": {
-                    "apikey": "ded0fe99217e8a35606cb6d39e0246f1"
-                }
-            },
-            # Method 5: x-api-key header with different key
-            {
-                "name": "x-api-key (alternative key)",
-                "headers": {
-                    "Content-Type": "application/json",
-                    "x-api-key": "ded0fe99217e8a35606cb6d39e0246f1",
-                    "Accept": "application/json"
-                }
-            },
-        ]
+            json=payload,
+            timeout=30,
+            allow_redirects=False
+        )
 
-        for config in auth_configs:
-            print(f"\n🔑 Trying: {config['name']}")
-            
-            # Prepare request parameters
-            kwargs = {
-                "url": "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
-                "headers": config["headers"],
-                "json": payload,
-                "timeout": 30,
-                "allow_redirects": False  # Don't follow redirects
-            }
-            
-            # Add query parameters if present
-            if "params" in config:
-                kwargs["params"] = config["params"]
-
-            response = requests.post(**kwargs)
-
-            print(f"   Status: {response.status_code}")
-            print(f"   Content-Type: {response.headers.get('content-type', 'unknown')}")
-
-            # Check if we got a redirect
-            if response.status_code in [301, 302, 303, 307, 308]:
-                location = response.headers.get('Location', '')
-                print(f"   ❌ Redirected to: {location}")
-                if 'login' in location:
-                    print(f"   ❌ Authentication failed for this method")
-                continue
-
-            # Success!
-            if response.status_code == 200:
-                print(f"   ✅ SUCCESS! Message sent!")
-                try:
-                    result = response.json()
-                    print(f"   Response: {json.dumps(result, indent=2)}")
-                except:
-                    print(f"   Response: {response.text[:200]}")
-                return True
-            
-            # Other status codes
-            elif response.status_code == 400:
-                print(f"   ❌ Bad Request: {response.text}")
-                return False
-            elif response.status_code == 401:
-                print(f"   ❌ Unauthorized: {response.text}")
-                continue
-            else:
-                print(f"   ❌ Unexpected status: {response.status_code}")
-                print(f"   Response: {response.text[:200]}")
-
-        print("\n❌ All authentication methods failed!")
-        print("\n💡 RECOMMENDED ACTIONS:")
-        print("   1. Generate a NEW API key from the dashboard")
-        print("   2. Make sure you're using the correct WhatsApp Business number")
-        print("   3. Check if your IP needs to be whitelisted")
-        print("   4. Verify the template name is exactly: karpooram_orderconfirmation")
-        return False
+        print(f"📊 Status: {response.status_code}")
+        
+        if response.status_code == 200:
+            print("✅ WhatsApp message sent successfully!")
+            try:
+                result = response.json()
+                print(f"📨 Response: {result}")
+            except:
+                print(f"📨 Response: {response.text}")
+            return True
+        elif response.status_code == 307:
+            print("❌ Still redirecting to login - API key is invalid")
+            print("💡 Make sure you copied the CORRECT key from the dashboard")
+            return False
+        elif response.status_code == 401:
+            print("❌ Unauthorized - Invalid API key")
+            return False
+        else:
+            print(f"❌ Unexpected status: {response.status_code}")
+            print(f"Response: {response.text[:200]}")
+            return False
 
     except Exception as e:
         print(f"❌ Error: {e}")
-        import traceback
-        traceback.print_exc()
         return False
 
 
