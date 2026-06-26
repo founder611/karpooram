@@ -746,13 +746,14 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
                 }
             },
             timeout=30,
-            allow_redirects=False
+            allow_redirects=True
         )
 
         print("=" * 60)
         print("STATUS :", response.status_code)
         print("URL    :", response.url)
         print("HEADERS:", response.headers)
+        print("Location :", response.headers.get("Location"))
         print("BODY   :", response.text)
         print("=" * 60)
 
