@@ -712,7 +712,7 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
 
 import requests
 
-MBG_API_KEY = "5196b633189f4f8542fe401b11bf399a"
+MBG_API_KEY = "6c98f9a29beb2aa3ed70a7b6229d50c1"
 
 import requests
 
