@@ -712,61 +712,152 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
 
 
 import requests
+from datetime import datetime
+import json
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
+    """
+    Fixed version with proper authentication and error handling
+    """
     try:
-        print("========== MBG WHATSAPP STARTED ==========")
-
-        # Clean phone number
+        # Clean phone
         phone = str(phone).replace(" ", "").replace("+", "").strip()
-
         if not phone.startswith("91"):
             phone = "91" + phone
 
-        print("PHONE :", phone)
+        if not order_date:
+            order_date = datetime.now().strftime("%d-%m-%Y")
+
+        # GET A NEW API KEY FROM YOUR DASHBOARD!
+        # Go to Settings -> Generate API Key
+        # Copy the new key and replace below
+        API_KEY = "a6c58fc8e2cda699027545c4802af8d8"  # REPLACE WITH NEW KEY
+        
+        payload = {
+            "templateName": "karpooram_orderconfirmation",
+            "senderId": phone,
+            "variables": {
+                "header": [],
+                "body": [
+                    str(name),
+                    str(quantity),
+                    str(amount),
+                    str(payment_id),
+                    str(order_date)
+                ]
+            }
+        }
+
+        print("📤 Sending WhatsApp Template...")
+        print(f"📱 To: {phone}")
+        print(f"📝 Template: karpooram_orderconfirmation")
+        print(f"📦 Variables: {payload['variables']['body']}")
 
         response = requests.post(
             "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
             headers={
                 "Content-Type": "application/json",
-                "x-api-key": "e0b1a703d4d3bfc0adcdec2681a0b219"
+                "x-api-key": API_KEY,
+                "Accept": "application/json",  # Important!
+                "User-Agent": "Mozilla/5.0"
             },
-            json={
-                "templateName": "karpooram_orderconfirmation",
-                "senderId": phone,
-                "variables": {
-                    "header": [],
-                    "body": [
-                        str(name),
-                        str(quantity),
-                        str(amount),
-                        str(payment_id),
-                        str(order_date)
-                    ]
-                }
-            },
+            json=payload,
             timeout=30,
-            allow_redirects=True
+            allow_redirects=False  # Don't follow redirects
         )
 
-        print("=" * 60)
-        print("STATUS :", response.status_code)
-        print("URL    :", response.url)
-        print("HEADERS:", response.headers)
-        print("Location :", response.headers.get("Location"))
-        print("BODY   :", response.text)
-        print("=" * 60)
+        print(f"\n📊 Status Code: {response.status_code}")
+        print(f"📋 Content-Type: {response.headers.get('content-type', 'unknown')}")
 
-        if response.status_code == 200:
-            print("✅ WhatsApp Message Sent Successfully")
-            return True
-        else:
-            print("❌ WhatsApp Message Failed")
+        # Check if we got redirected (authentication issue)
+        if response.status_code in [301, 302, 303, 307, 308]:
+            location = response.headers.get('Location', '')
+            print(f"❌ Redirected to: {location}")
+            if 'login' in location:
+                print("❌ AUTHENTICATION FAILED - Invalid API Key!")
+                print("💡 Generate a new API key from the dashboard")
+                return False
+
+        # Check if we got HTML instead of JSON (login page)
+        if 'text/html' in response.headers.get('content-type', ''):
+            print("❌ Received HTML instead of JSON - Authentication failed")
+            print("💡 Your API key is likely invalid or expired")
             return False
 
-    except Exception as e:
-        print("MBG WhatsApp Error:", e)
+        # Try to parse JSON response
+        try:
+            result = response.json()
+            print(f"✅ Success: {result}")
+            return True
+        except json.JSONDecodeError:
+            print(f"❌ Invalid JSON response: {response.text[:200]}")
+            return False
+
+    except requests.exceptions.ConnectionError:
+        print("❌ Cannot connect to MBG API - Check your internet")
         return False
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
+
+
+
+# import requests
+
+# def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
+#     try:
+#         print("========== MBG WHATSAPP STARTED ==========")
+
+#         # Clean phone number
+#         phone = str(phone).replace(" ", "").replace("+", "").strip()
+
+#         if not phone.startswith("91"):
+#             phone = "91" + phone
+
+#         print("PHONE :", phone)
+
+#         response = requests.post(
+#             "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
+#             headers={
+#                 "Content-Type": "application/json",
+#                 "x-api-key": "e0b1a703d4d3bfc0adcdec2681a0b219"
+#             },
+#             json={
+#                 "templateName": "karpooram_orderconfirmation",
+#                 "senderId": phone,
+#                 "variables": {
+#                     "header": [],
+#                     "body": [
+#                         str(name),
+#                         str(quantity),
+#                         str(amount),
+#                         str(payment_id),
+#                         str(order_date)
+#                     ]
+#                 }
+#             },
+#             timeout=30,
+#             allow_redirects=True
+#         )
+
+#         print("=" * 60)
+#         print("STATUS :", response.status_code)
+#         print("URL    :", response.url)
+#         print("HEADERS:", response.headers)
+#         print("Location :", response.headers.get("Location"))
+#         print("BODY   :", response.text)
+#         print("=" * 60)
+
+#         if response.status_code == 200:
+#             print("✅ WhatsApp Message Sent Successfully")
+#             return True
+#         else:
+#             print("❌ WhatsApp Message Failed")
+#             return False
+
+#     except Exception as e:
+#         print("MBG WhatsApp Error:", e)
+#         return False
 
 
 # def send_whatsapp_message(name, phone, quantity):
