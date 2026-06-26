@@ -17,6 +17,8 @@ urlpatterns = [
     path('userpayment_post/', views.userpayment_post),
     path('emailenquiry/', views.emailenquiry),
     path('blog/', views.blog_page,name='blog'),
+    # path("send-otp/", views.send_otp),
+
     path(
         "googleca06e218bc89f31c.html",
         TemplateView.as_view(
