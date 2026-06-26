@@ -599,6 +599,7 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from urllib import response
 from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import datetime
@@ -711,8 +712,9 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
 
 import requests
 
-MBG_API_KEY = "38572f2dadb26327767a6929dd116c14"
+MBG_API_KEY = "5196b633189f4f8542fe401b11bf399a"
 
+import requests
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
     try:
@@ -726,44 +728,58 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
 
         print("PHONE :", phone)
 
-        url = "https://chatbot.digitalmbg.com/v1/whatsapp/send_template"
+        # Check your documentation carefully.
+        # If the endpoint is actually "send_templet", change it below.
+        url = "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet"
+
         headers = {
-            "x-api-key": MBG_API_KEY,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-api-key": MBG_API_KEY
         }
 
         payload = {
-            "senderId": phone,
-            "templateName": "karpooram_orderconfirmation",   # Your approved template name
+            "templateName": "karpooram_orderconfirmation",
+            "senderId": phone,   # Customer WhatsApp number
             "variables": {
                 "header": [],
                 "body": [
-                    str(name),          # {{1}}
-                    str(quantity),      # {{2}}
-                    str(amount),    # {{3}}
-                    str(payment_id),       # {{4}}
-                    str(order_date)       # {{5}}
+                    str(name),
+                    str(quantity),
+                    str(amount),
+                    str(payment_id),
+                    str(order_date)
                 ]
             }
         }
 
+        print("=" * 60)
         print("URL:", url)
+        print("HEADERS:", headers)
         print("PAYLOAD:", payload)
+        print("=" * 60)
 
         response = requests.post(
-            url,
+            url=url,
             headers=headers,
             json=payload,
-            timeout=30
+            timeout=30,
+            allow_redirects=False
         )
 
-        print("STATUS:", response.status_code)
-        print("RESPONSE:", response.text)
+        print("STATUS CODE :", response.status_code)
+        print("RESPONSE URL:", response.url)
+        print("LOCATION    :", response.headers.get("Location"))
+        print("RESPONSE    :", response.text)
 
-        return response.status_code == 200
+        if response.status_code == 200:
+            print("✅ WhatsApp Message Sent Successfully")
+            return True
+        else:
+            print("❌ WhatsApp Message Failed")
+            return False
 
     except Exception as e:
-        print("MBG WhatsApp Error:", e)
+        print("MBG WhatsApp Error:", str(e))
         return False
 
 # def send_whatsapp_message(name, phone, quantity):
