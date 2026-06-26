@@ -11,12 +11,12 @@ sitemaps = {
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', views.homepage),
+    path('', views.homepage,name='home'),
     path('order_post/', views.order_post),
     path('raz_pay/<amount>', views.raz_pay),
     path('userpayment_post/', views.userpayment_post),
     path('emailenquiry/', views.emailenquiry),
-    path('blog/', views.blog_page),
+    path('blog/', views.blog_page,name='blog'),
     path(
         "googleca06e218bc89f31c.html",
         TemplateView.as_view(
