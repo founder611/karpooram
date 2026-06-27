@@ -115,45 +115,57 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
         return False
 
 
-
 import requests
-from datetime import datetime
 
-def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
+def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=""):
     try:
-        API_KEY = "901ff03aa80b2d5793fb6368f4e0ea22"
-        
-        # Clean phone number (remove spaces, + sign)
+        API_KEY = "f1170848aaaeca3fad4cbe5f71e16b7b"
+
+        # Clean phone number
         phone = str(phone).replace(" ", "").replace("+", "").strip()
         if not phone.startswith("91"):
             phone = "91" + phone
 
-        # Set order date if not provided
-        if not order_date:
-            order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        # Prepare payload with all 5 variables
         payload = {
-            "templateName": "karpooram_orderconfirmation",
-            "senderId": phone,
-            "variables": {
-                "header": ["Thank You for Your Order"],  # No header variables in this template
-                "body": [
-                    str(name),        # {{1}} - Customer Name
-                    str(quantity),    # {{2}} - Quantity
-                    str(amount),      # {{3}} - Amount Paid
-                    str(payment_id),  # {{4}} - Payment ID
-                    str(order_date)   # {{5}} - Order Date
-                ]
-            }
+            "senderId": f"+{phone}",
+            "name": str(name),
+            "actions": [
+                {
+                    "action": "set_field_value",
+                    "field_name": "name",
+                    "value": str(name)
+                },
+                {
+                    "action": "set_field_value",
+                    "field_name": "quantity",
+                    "value": str(quantity)
+                },
+                {
+                    "action": "set_field_value",
+                    "field_name": "amount",
+                    "value": str(amount)
+                },
+                {
+                    "action": "set_field_value",
+                    "field_name": "payment_id",
+                    "value": str(payment_id)
+                },
+                {
+                    "action": "set_field_value",
+                    "field_name": "order_date",
+                    "value": str(order_date)
+                },
+                {
+                    "action": "send_flow",
+                    "flow_id": "flow_1782557295677"
+                }
+            ]
         }
 
-        print(f"📤 Sending to: {phone}")
-        print(f"📝 Template: karpooram_orderconfirmation")
-        print(f"📋 Variables: Name={name}, Qty={quantity}, Amount=₹{amount}, Payment={payment_id}")
+        print(f"📤 Sending Flow to {phone}")
 
         response = requests.post(
-            "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
+            "https://chatbot.digitalmbg.com/v1/contacts/send_flow",
             headers={
                 "Content-Type": "application/json",
                 "x-api-key": API_KEY,
@@ -163,43 +175,19 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
             timeout=30
         )
 
-        print(f"📊 Status Code: {response.status_code}")
-        
+        print("Status:", response.status_code)
+        print("Response:", response.text)
+
         if response.status_code == 200:
-            print("✅ WhatsApp message sent successfully!")
-            try:
-                result = response.json()
-                print(f"📨 Response: {result}")
-            except:
-                print(f"📨 Response: {response.text}")
+            print("✅ Flow triggered successfully")
             return True
-        elif response.status_code == 307:
-            print("❌ Redirecting to login - Invalid API key")
-            print("💡 Please get the correct API key from your dashboard")
-            return False
-        elif response.status_code == 401:
-            print("❌ Unauthorized - Invalid or expired API key")
-            return False
-        elif response.status_code == 400:
-            print("❌ Bad Request - Check template name or variables")
-            print(f"Response: {response.text}")
-            return False
         else:
-            print(f"❌ Failed with status: {response.status_code}")
-            print(f"Response: {response.text[:200]}")
+            print("❌ Failed")
             return False
 
-    except requests.exceptions.Timeout:
-        print("❌ Request timed out - Please try again")
-        return False
-    except requests.exceptions.ConnectionError:
-        print("❌ Connection error - Check your internet")
-        return False
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print("Error:", e)
         return False
-
-
 
 # import requests
 
