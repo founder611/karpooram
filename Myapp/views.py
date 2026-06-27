@@ -172,7 +172,8 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date="
                 "Accept": "application/json"
             },
             json=payload,
-            timeout=30
+            timeout=30,
+            allow_redirects=False
         )
 
         print("Status:", response.status_code)
