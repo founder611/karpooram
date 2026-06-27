@@ -17,7 +17,8 @@ urlpatterns = [
     path('userpayment_post/', views.userpayment_post),
     path('emailenquiry/', views.emailenquiry),
     path('blog/', views.blog_page,name='blog'),
-    # path("send-otp/", views.send_otp),
+    path('send-otp/', views.send_otp, name='send_otp'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
 
     path(
         "googleca06e218bc89f31c.html",
@@ -32,5 +33,6 @@ urlpatterns = [
     {'sitemaps': sitemaps},
     name='sitemap'
     ),
+    
     path("robots.txt", views.robots_txt),
 ]
