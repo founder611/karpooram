@@ -119,13 +119,14 @@ import requests
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=""):
     try:
-        API_KEY = "f1170848aaaeca3fad4cbe5f71e16b7b"
 
-        # Clean phone number
+        print("========== MBG WHATSAPP STARTED ==========")
         phone = str(phone).replace(" ", "").replace("+", "").strip()
         if not phone.startswith("91"):
             phone = "91" + phone
 
+        print("FINAL PHONE:", phone)
+        print("ORDER DATE:", order_date)
         payload = {
             "senderId": f"+{phone}",
             "name": str(name),
@@ -168,7 +169,7 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date="
             "https://chatbot.digitalmbg.com/v1/contacts/send_flow",
             headers={
                 "Content-Type": "application/json",
-                "x-api-key": API_KEY,
+                "x-api-key": "8fad72cd00bdb15e55ee3d698beaf665",
                 "Accept": "application/json"
             },
             json=payload,
