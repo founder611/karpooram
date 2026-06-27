@@ -169,8 +169,8 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date="
             "https://chatbot.digitalmbg.com/v1/contacts/send_flow",
             headers={
                 "Content-Type": "application/json",
-                "x-api-key": "8fad72cd00bdb15e55ee3d698beaf665",
-                "Accept": "application/json"
+                "x-api-key": "608ab0e45555eda6cd8f920070b385a2",
+                "accept": "application/json"
             },
             json=payload,
             timeout=30,
