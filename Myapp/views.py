@@ -711,237 +711,88 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
 
 
 
-# ==========================================
-# WHATSAPP SENDER - USING SESSION AUTH
-# ==========================================
-
-class WhatsAppSender:
-    def __init__(self):
-        self.session = requests.Session()
-        self.base_url = "https://chatbot.digitalmbg.com"
-        self.is_logged_in = False
-        
-        # Your login credentials
-        self.email = "premsekhar@yathisha.com"  # Your MBG login email
-        self.password = "Aryan@2014"  # Your MBG login password
-        
-    def login(self):
-        """Login to MBG and get session cookies"""
-        try:
-            print("🔐 Logging into MBG...")
-            
-            # First try: Get CSRF token
-            login_page = self.session.get(f"{self.base_url}/login")
-            
-            # Extract CSRF token from page (if needed)
-            # For some sites, you need to extract CSRF token
-            
-            # Login request
-            login_response = self.session.post(
-                f"{self.base_url}/api/login",  # Try this endpoint
-                json={
-                    "email": self.email,
-                    "password": self.password,
-                    "remember": True
-                },
-                headers={
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            )
-            
-            # Alternative: Try form-based login
-            if login_response.status_code != 200:
-                login_response = self.session.post(
-                    f"{self.base_url}/login",
-                    data={
-                        "email": self.email,
-                        "password": self.password,
-                        "remember": "on"
-                    },
-                    headers={
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                )
-            
-            if login_response.status_code == 200:
-                self.is_logged_in = True
-                print("✅ Logged in successfully!")
-                return True
-            else:
-                print(f"❌ Login failed: {login_response.status_code}")
-                return False
-                
-        except Exception as e:
-            print(f"❌ Login error: {e}")
-            return False
-    
-    def send_template(self, name, phone, quantity, payment_id, amount, order_date=""):
-        """Send WhatsApp template message"""
-        try:
-            if not self.is_logged_in:
-                if not self.login():
-                    return False
-            
-            # Clean phone
-            phone = str(phone).replace(" ", "").replace("+", "").strip()
-            if not phone.startswith("91"):
-                phone = "91" + phone
-            
-            if not order_date:
-                order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            
-            payload = {
-                "templateName": "karpooram_orderconfirmation",
-                "senderId": phone,
-                "variables": {
-                    "header": [],
-                    "body": [
-                        str(name),        # {{1}}
-                        str(quantity),    # {{2}}
-                        str(amount),      # {{3}}
-                        str(payment_id),  # {{4}}
-                        str(order_date)   # {{5}}
-                    ]
-                }
-            }
-            
-            print(f"📤 Sending WhatsApp to: {phone}")
-            print(f"📋 Variables: {payload['variables']['body']}")
-            
-            # Send using session (cookies are automatically handled)
-            response = self.session.post(
-                f"{self.base_url}/v1/whatsapp/send_template",
-                json=payload,
-                headers={
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "X-Requested-With": "XMLHttpRequest"  # Helps with CSRF
-                },
-                timeout=30
-            )
-            
-            print(f"📊 Status: {response.status_code}")
-            
-            # Check if we got JSON or HTML
-            content_type = response.headers.get('content-type', '')
-            
-            if 'application/json' in content_type:
-                result = response.json()
-                print(f"✅ WhatsApp sent: {result}")
-                return True
-            else:
-                # Check if we got HTML (login page)
-                if '<title>' in response.text and 'login' in response.text.lower():
-                    print("❌ Session expired, re-logging in...")
-                    self.is_logged_in = False
-                    if self.login():
-                        # Retry once
-                        return self.send_template(name, phone, quantity, payment_id, amount, order_date)
-                    return False
-                else:
-                    print(f"❌ Unexpected response: {response.text[:200]}")
-                    return False
-                    
-        except Exception as e:
-            print(f"❌ Error: {e}")
-            return False
-
-# Global instance
-whatsapp_sender = WhatsAppSender()
-
-# ==========================================
-# SEND WHATSAPP MESSAGE FUNCTION
-# ==========================================
+import requests
+from datetime import datetime
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
-    """Send WhatsApp message using session authentication"""
-    return whatsapp_sender.send_template(name, phone, quantity, payment_id, amount, order_date)
-
-
-
-# import requests
-# from datetime import datetime
-
-# def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
-#     try:
-#         API_KEY = "a66e9b9f209abd416ad08cf73c5bf712"
+    try:
+        API_KEY = "42a6d99fd437cc1e59b6460897f96a04"
         
-#         # Clean phone number (remove spaces, + sign)
-#         phone = str(phone).replace(" ", "").replace("+", "").strip()
-#         if not phone.startswith("91"):
-#             phone = "91" + phone
+        # Clean phone number (remove spaces, + sign)
+        phone = str(phone).replace(" ", "").replace("+", "").strip()
+        if not phone.startswith("91"):
+            phone = "91" + phone
 
-#         # Set order date if not provided
-#         if not order_date:
-#             order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # Set order date if not provided
+        if not order_date:
+            order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-#         # Prepare payload with all 5 variables
-#         payload = {
-#             "templateName": "karpooram_orderconfirmation",
-#             "senderId": phone,
-#             "variables": {
-#                 "header": [],  # No header variables in this template
-#                 "body": [
-#                     str(name),        # {{1}} - Customer Name
-#                     str(quantity),    # {{2}} - Quantity
-#                     str(amount),      # {{3}} - Amount Paid
-#                     str(payment_id),  # {{4}} - Payment ID
-#                     str(order_date)   # {{5}} - Order Date
-#                 ]
-#             }
-#         }
+        # Prepare payload with all 5 variables
+        payload = {
+            "templateName": "karpooram_orderconfirmation",
+            "senderId": phone,
+            "variables": {
+                "header": [],  # No header variables in this template
+                "body": [
+                    str(name),        # {{1}} - Customer Name
+                    str(quantity),    # {{2}} - Quantity
+                    str(amount),      # {{3}} - Amount Paid
+                    str(payment_id),  # {{4}} - Payment ID
+                    str(order_date)   # {{5}} - Order Date
+                ]
+            }
+        }
 
-#         print(f"📤 Sending to: {phone}")
-#         print(f"📝 Template: karpooram_orderconfirmation")
-#         print(f"📋 Variables: Name={name}, Qty={quantity}, Amount=₹{amount}, Payment={payment_id}")
+        print(f"📤 Sending to: {phone}")
+        print(f"📝 Template: karpooram_orderconfirmation")
+        print(f"📋 Variables: Name={name}, Qty={quantity}, Amount=₹{amount}, Payment={payment_id}")
 
-#         response = requests.post(
-#             "https://chatbot.digitalmbg.com/v1/whatsapp/send_template",
-#             headers={
-#                 "Content-Type": "application/json",
-#                 "x-api-key": API_KEY,
-#                 "Accept": "application/json"
-#             },
-#             json=payload,
-#             timeout=30
-#         )
+        response = requests.post(
+            "https://chatbot.digitalmbg.com/v1/whatsapp/send_template",
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": API_KEY,
+                "Accept": "application/json"
+            },
+            json=payload,
+            timeout=30
+        )
 
-#         print(f"📊 Status Code: {response.status_code}")
+        print(f"📊 Status Code: {response.status_code}")
         
-#         if response.status_code == 200:
-#             print("✅ WhatsApp message sent successfully!")
-#             try:
-#                 result = response.json()
-#                 print(f"📨 Response: {result}")
-#             except:
-#                 print(f"📨 Response: {response.text}")
-#             return True
-#         elif response.status_code == 307:
-#             print("❌ Redirecting to login - Invalid API key")
-#             print("💡 Please get the correct API key from your dashboard")
-#             return False
-#         elif response.status_code == 401:
-#             print("❌ Unauthorized - Invalid or expired API key")
-#             return False
-#         elif response.status_code == 400:
-#             print("❌ Bad Request - Check template name or variables")
-#             print(f"Response: {response.text}")
-#             return False
-#         else:
-#             print(f"❌ Failed with status: {response.status_code}")
-#             print(f"Response: {response.text[:200]}")
-#             return False
+        if response.status_code == 200:
+            print("✅ WhatsApp message sent successfully!")
+            try:
+                result = response.json()
+                print(f"📨 Response: {result}")
+            except:
+                print(f"📨 Response: {response.text}")
+            return True
+        elif response.status_code == 307:
+            print("❌ Redirecting to login - Invalid API key")
+            print("💡 Please get the correct API key from your dashboard")
+            return False
+        elif response.status_code == 401:
+            print("❌ Unauthorized - Invalid or expired API key")
+            return False
+        elif response.status_code == 400:
+            print("❌ Bad Request - Check template name or variables")
+            print(f"Response: {response.text}")
+            return False
+        else:
+            print(f"❌ Failed with status: {response.status_code}")
+            print(f"Response: {response.text[:200]}")
+            return False
 
-#     except requests.exceptions.Timeout:
-#         print("❌ Request timed out - Please try again")
-#         return False
-#     except requests.exceptions.ConnectionError:
-#         print("❌ Connection error - Check your internet")
-#         return False
-#     except Exception as e:
-#         print(f"❌ Error: {e}")
-#         return False
+    except requests.exceptions.Timeout:
+        print("❌ Request timed out - Please try again")
+        return False
+    except requests.exceptions.ConnectionError:
+        print("❌ Connection error - Check your internet")
+        return False
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return False
 
 
 
