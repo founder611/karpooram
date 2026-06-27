@@ -500,12 +500,16 @@ def robots_txt(request):
     ) 
 
 
-
-import random
 import json
-from django.http import JsonResponse
+import random
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
+from django.shortcuts import render
+from datetime import datetime
 
 def generate_otp():
     """Generate a 6-digit OTP"""
@@ -562,7 +566,12 @@ def send_otp(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
     
     try:
-        data = json.loads(request.body)
+        # Parse JSON body
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+        
         email = data.get('email', '').strip()
         
         if not email:
@@ -581,9 +590,8 @@ def send_otp(request):
         else:
             return JsonResponse({'status': 'error', 'message': 'Failed to send email'}, status=500)
             
-    except json.JSONDecodeError:
-        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
     except Exception as e:
+        print(f"Send OTP error: {e}")
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 @csrf_exempt
@@ -593,7 +601,12 @@ def verify_otp(request):
         return JsonResponse({'verified': False, 'message': 'Invalid method'}, status=405)
     
     try:
-        data = json.loads(request.body)
+        # Parse JSON body
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except:
+            return JsonResponse({'verified': False, 'message': 'Invalid JSON'}, status=400)
+        
         otp_input = data.get('otp', '').strip()
         email = data.get('email', '').strip()
         
@@ -619,7 +632,6 @@ def verify_otp(request):
         else:
             return JsonResponse({'verified': False, 'message': 'Invalid OTP'}, status=400)
             
-    except json.JSONDecodeError:
-        return JsonResponse({'verified': False, 'message': 'Invalid JSON'}, status=400)
     except Exception as e:
+        print(f"Verify OTP error: {e}")
         return JsonResponse({'verified': False, 'message': str(e)}, status=500)
