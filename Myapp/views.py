@@ -500,16 +500,15 @@ def robots_txt(request):
     ) 
 
 
+
 import json
 import random
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
-from django.shortcuts import render
-from datetime import datetime
 
 def generate_otp():
     """Generate a 6-digit OTP"""
@@ -566,7 +565,6 @@ def send_otp(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
     
     try:
-        # Parse JSON body
         try:
             data = json.loads(request.body.decode('utf-8'))
         except:
@@ -577,14 +575,10 @@ def send_otp(request):
         if not email:
             return JsonResponse({'status': 'error', 'message': 'Email required'}, status=400)
         
-        # Generate OTP
         otp = generate_otp()
-        
-        # Store in cache (expires in 5 minutes)
         cache_key = f"otp_{email}"
         cache.set(cache_key, otp, timeout=300)
         
-        # Send email
         if send_email_otp(email, otp):
             return JsonResponse({'status': 'success', 'message': 'OTP sent to email'})
         else:
@@ -601,7 +595,6 @@ def verify_otp(request):
         return JsonResponse({'verified': False, 'message': 'Invalid method'}, status=405)
     
     try:
-        # Parse JSON body
         try:
             data = json.loads(request.body.decode('utf-8'))
         except:
@@ -613,7 +606,6 @@ def verify_otp(request):
         if not email or not otp_input:
             return JsonResponse({'verified': False, 'message': 'Missing data'}, status=400)
         
-        # Get stored OTP from cache
         cache_key = f"otp_{email}"
         stored_otp = cache.get(cache_key)
         
@@ -621,13 +613,7 @@ def verify_otp(request):
             return JsonResponse({'verified': False, 'message': 'OTP expired or not found'}, status=400)
         
         if str(stored_otp) == str(otp_input):
-            # Mark email as verified in session
-            request.session['email_verified'] = email
-            request.session['verified_at'] = str(datetime.now())
-            
-            # Delete OTP from cache after successful verification
             cache.delete(cache_key)
-            
             return JsonResponse({'verified': True, 'message': 'OTP verified successfully'})
         else:
             return JsonResponse({'verified': False, 'message': 'Invalid OTP'}, status=400)
