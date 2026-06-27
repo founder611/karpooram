@@ -716,7 +716,7 @@ from datetime import datetime
 
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
     try:
-        API_KEY = "42a6d99fd437cc1e59b6460897f96a04"
+        API_KEY = "901ff03aa80b2d5793fb6368f4e0ea22"
         
         # Clean phone number (remove spaces, + sign)
         phone = str(phone).replace(" ", "").replace("+", "").strip()
@@ -732,7 +732,7 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
             "templateName": "karpooram_orderconfirmation",
             "senderId": phone,
             "variables": {
-                "header": [],  # No header variables in this template
+                "header": ["Thank You for Your Order"],  # No header variables in this template
                 "body": [
                     str(name),        # {{1}} - Customer Name
                     str(quantity),    # {{2}} - Quantity
@@ -748,7 +748,7 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
         print(f"📋 Variables: Name={name}, Qty={quantity}, Amount=₹{amount}, Payment={payment_id}")
 
         response = requests.post(
-            "https://chatbot.digitalmbg.com/v1/whatsapp/send_template",
+            "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
             headers={
                 "Content-Type": "application/json",
                 "x-api-key": API_KEY,
