@@ -127,7 +127,7 @@ def send_whatsapp_message_template(name, phone, quantity, payment_id, amount, or
             phone = "91" + phone
 
         payload = {
-            "templateName": "karpooram_order",   # Your approved template name
+            "templateName": "karpooram_orderconfirmation",   # Your approved template name
             "senderId": phone,                   # No '+' unless documentation requires it
             "chatId": "1402050",
             "variables": {
