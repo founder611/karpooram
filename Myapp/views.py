@@ -115,28 +115,28 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
         return False
 
 
+
 import requests
 
 def send_whatsapp_message_template(name, phone, quantity, payment_id, amount, order_date=""):
     try:
         print("========== MBG WHATSAPP TEMPLATE ==========")
 
-        # Format phone number
         phone = str(phone).replace(" ", "").replace("+", "").strip()
         if not phone.startswith("91"):
             phone = "91" + phone
 
         payload = {
-            "templateName": "karpooram_orderconfirmation",   # Your approved template name
-            "senderId": phone,                   # No '+' needed
+            "templateName": "karpooram_order",   # Your approved template name
+            "senderId": phone,                   # No '+' unless documentation requires it
             "variables": {
                 "header": [],
                 "body": [
-                    str(name),          # {{1}}
-                    str(quantity),      # {{2}}
-                    str(amount),        # {{3}}
-                    str(payment_id),    # {{4}}
-                    str(order_date)     # {{5}}
+                    str(name),
+                    str(quantity),
+                    str(amount),
+                    str(payment_id),
+                    str(order_date)
                 ]
             }
         }
@@ -154,16 +154,12 @@ def send_whatsapp_message_template(name, phone, quantity, payment_id, amount, or
         print("Status:", response.status_code)
         print("Response:", response.text)
 
-        if response.status_code == 200:
-            print("✅ WhatsApp Template Sent Successfully")
-            return True
-        else:
-            print("❌ Failed to send template")
-            return False
+        return response.status_code == 200
 
     except Exception as e:
-        print("Error:", e)
+        print(e)
         return False
+
 
 import requests
 def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
