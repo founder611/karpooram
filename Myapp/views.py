@@ -115,139 +115,146 @@ def save_order_to_supabase(name, email, phone, address, quantity, payment_id,amo
         return False
 
 
-import requests
 
-def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=""):
-    try:
-
-        print("========== MBG WHATSAPP STARTED ==========")
-        phone = str(phone).replace(" ", "").replace("+", "").strip()
-        if not phone.startswith("91"):
-            phone = "91" + phone
-
-        print("FINAL PHONE:", phone)
-        print("ORDER DATE:", order_date)
-        payload = {
-            "senderId": f"+{phone}",
-            "name": str(name),
-            "actions": [
-                {
-                    "action": "set_field_value",
-                    "field_name": "name",
-                    "value": str(name)
-                },
-                {
-                    "action": "set_field_value",
-                    "field_name": "quantity",
-                    "value": str(quantity)
-                },
-                {
-                    "action": "set_field_value",
-                    "field_name": "amount",
-                    "value": str(amount)
-                },
-                {
-                    "action": "set_field_value",
-                    "field_name": "payment_id",
-                    "value": str(payment_id)
-                },
-                {
-                    "action": "set_field_value",
-                    "field_name": "order_date",
-                    "value": str(order_date)
-                },
-                {
-                    "action": "send_flow",
-                    "flow_id": "flow_1782557295677"
-                }
-            ]
-        }
-
-        print(f"📤 Sending Flow to {phone}")
-
-        response = requests.post(
-            "https://chatbot.digitalmbg.com/v1/contacts/send_flow",
-            headers={
-                "Content-Type": "application/json",
-                "x-api-key": "608ab0e45555eda6cd8f920070b385a2",
-                "accept": "application/json"
-            },
-            json=payload,
-            timeout=30,
-            allow_redirects=False
-        )
-
-        print("Status:", response.status_code)
-        print("Response:", response.text)
-
-        if response.status_code == 200:
-            print("✅ Flow triggered successfully")
-            return True
-        else:
-            print("❌ Failed")
-            return False
-
-    except Exception as e:
-        print("Error:", e)
-        return False
-
-# import requests
-
-# def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
+# def send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=""):
 #     try:
+
 #         print("========== MBG WHATSAPP STARTED ==========")
-
-#         # Clean phone number
 #         phone = str(phone).replace(" ", "").replace("+", "").strip()
-
 #         if not phone.startswith("91"):
 #             phone = "91" + phone
 
-#         print("PHONE :", phone)
+#         print("FINAL PHONE:", phone)
+#         print("ORDER DATE:", order_date)
+#         payload = {
+#             "senderId": f"+{phone}",
+#             "name": str(name),
+#             "actions": [
+#                 {
+#                     "action": "set_field_value",
+#                     "field_name": "name",
+#                     "value": str(name)
+#                 },
+#                 {
+#                     "action": "set_field_value",
+#                     "field_name": "quantity",
+#                     "value": str(quantity)
+#                 },
+#                 {
+#                     "action": "set_field_value",
+#                     "field_name": "amount",
+#                     "value": str(amount)
+#                 },
+#                 {
+#                     "action": "set_field_value",
+#                     "field_name": "payment_id",
+#                     "value": str(payment_id)
+#                 },
+#                 {
+#                     "action": "set_field_value",
+#                     "field_name": "order_date",
+#                     "value": str(order_date)
+#                 },
+#                 {
+#                     "action": "send_flow",
+#                     "flow_id": "flow_1782557295677"
+#                 }
+#             ]
+#         }
+
+#         print(f"📤 Sending Flow to {phone}")
 
 #         response = requests.post(
-#             "https://chatbot.digitalmbg.com/v1/whatsapp/send_templet",
+#             "https://chatbot.digitalmbg.com/v1/contacts/send_flow",
 #             headers={
 #                 "Content-Type": "application/json",
-#                 "x-api-key": "e0b1a703d4d3bfc0adcdec2681a0b219"
+#                 "x-api-key": "608ab0e45555eda6cd8f920070b385a2",
+#                 "accept": "application/json"
 #             },
-#             json={
-#                 "templateName": "karpooram_orderconfirmation",
-#                 "senderId": phone,
-#                 "variables": {
-#                     "header": [],
-#                     "body": [
-#                         str(name),
-#                         str(quantity),
-#                         str(amount),
-#                         str(payment_id),
-#                         str(order_date)
-#                     ]
-#                 }
-#             },
+#             json=payload,
 #             timeout=30,
-#             allow_redirects=True
+#             allow_redirects=False
 #         )
 
-#         print("=" * 60)
-#         print("STATUS :", response.status_code)
-#         print("URL    :", response.url)
-#         print("HEADERS:", response.headers)
-#         print("Location :", response.headers.get("Location"))
-#         print("BODY   :", response.text)
-#         print("=" * 60)
+#         print("Status:", response.status_code)
+#         print("Response:", response.text)
 
 #         if response.status_code == 200:
-#             print("✅ WhatsApp Message Sent Successfully")
+#             print("✅ Flow triggered successfully")
 #             return True
 #         else:
-#             print("❌ WhatsApp Message Failed")
+#             print("❌ Failed")
 #             return False
 
 #     except Exception as e:
-#         print("MBG WhatsApp Error:", e)
+#         print("Error:", e)
 #         return False
 
+import requests
+
+
+def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=""):
+
+    phone = str(phone).replace("+", "").replace(" ", "")
+
+    if not phone.startswith("91"):
+        phone = "91" + phone
+
+    payload = {
+        "senderId": "+" + phone,
+        "name": name,
+        "actions": [
+
+            {
+                "action": "set_field_value",
+                "field_name": "name",
+                "value": name
+            },
+
+            {
+                "action": "set_field_value",
+                "field_name": "quantity",
+                "value": str(quantity)
+            },
+
+            {
+                "action": "set_field_value",
+                "field_name": "amount",
+                "value": str(amount)
+            },
+
+            {
+                "action": "set_field_value",
+                "field_name": "payment_id",
+                "value": payment_id
+            },
+
+            {
+                "action": "set_field_value",
+                "field_name": "order_date",
+                "value": order_date
+            },
+
+            {
+                "action": "send_flow",
+                "flow_id": "flow_1782557295677"
+            }
+
+        ]
+    }
+
+    response = requests.post(
+        "https://chatbot.digitalmbg.com/v1/contacts",
+        headers={
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "x-api-key": "39832662461ae94fa94b03487c7866f3"
+        },
+        json=payload
+    )
+
+    print(response.status_code)
+    print(response.text)
 
 # def send_whatsapp_message(name, phone, quantity):
 #     try:
