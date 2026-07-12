@@ -657,7 +657,7 @@ def blog_page(request):
 # from the browser (a user could tamper with it).
 # ==========================================
 PRICING_TIERS = {
-    "50g":  {1: 199, 2: 349, 4: 649},
+    "50g":  {1: 1, 2: 349, 4: 649},
     "175g": {1: 549, 2: 999, 4: 1899},
 }
 
@@ -706,7 +706,6 @@ def order_post(request):
     if pack_count < 1:
         pack_count = 1
 
-    # Recompute price on the server — never trust request.POST['total_price'].
     price_rupees = calculate_price(quantity, pack_count)
     amount = int(round(price_rupees * 100))  # paise, for Razorpay
 
