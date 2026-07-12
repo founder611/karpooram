@@ -980,6 +980,16 @@ def userpayment_post(request):
         payment_id = request.POST.get('payment_id')
         amount = request.POST.get('amount')
 
+        print("Received payment POST:", {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'address': address,
+            'quantity': quantity,
+            'payment_id': payment_id,
+            'amount': amount
+        })
+
         try:
             pack_count = int(request.POST.get('pack_count', 1))
         except (TypeError, ValueError):
@@ -1075,19 +1085,24 @@ def userpayment_post(request):
         
         # 2. Save to Supabase (non-critical)
         try:
+            print(f"Saving order to Supabase: {name}, {email}, {phone}, {address}, {quantity}, {payment_id}, {amount}, {pack_count}")
             save_order_to_supabase(name, email, phone, address, quantity, payment_id, amount, pack_count)
         except Exception as e:
             print(f"❌ Supabase save error: {str(e)}")
         
         # 3. Send WhatsApp (non-critical)
         try:
+            print(f"Sending WhatsApp message: {name}, {phone}, {quantity}, {payment_id}, {amount}")
             send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         except Exception as e:
             print(f"❌ WhatsApp error: {str(e)}")
 
         try:
+            print(f"Creating Delhivery shipment for order: {name}, {phone}, {address}, {quantity}, {payment_id}, {amount}")
             delhivery = DelhiveryAPI()
             waybill = delhivery.generate_waybill()
+
+            print(f"Generated waybill: {waybill}")
             order_data = {
                 "customer_name": name,
                 "phone": phone,
@@ -1098,8 +1113,10 @@ def userpayment_post(request):
                 "waybill": waybill[0] if waybill else "",
                 "weight": "0.5",  # Weight in kg
             }
+            print(f"Order data for Delhivery: {order_data}")
             shipment_response = delhivery.create_shipment(order_data)
 
+            print(f"Shipment response: {shipment_response}")    
             if shipment_response:
                 print(f"Shipment created: {shipment_response}")
             else:

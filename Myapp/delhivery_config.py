@@ -5,6 +5,8 @@ import base64
 
 class DelhiveryAPI:
     def __init__(self):
+
+        print("Initializing DelhiveryAPI...")
         self.base_url = "https://track.delhivery.com"  # Production URL
         self.api_key = "e1699e2152af513b14662e0a587606854ef9e5c6"  # Get from Delhivery dashboard
         self.pickup_address = {
@@ -15,10 +17,12 @@ class DelhiveryAPI:
             "pincode": "680004",
             "phone": "7204610007"
         }
+
+        print("DelhiveryAPI initialized with pickup address:", self.pickup_address)
         
     def create_shipment(self, order_data):
         """Create a shipment in Delhivery"""
-        
+        print("Creating shipment in Delhivery...")
         # Prepare shipment data
         shipment_data = {
             "shipment": {
@@ -58,6 +62,8 @@ class DelhiveryAPI:
                 "client_id": "ECOMONKS"
             }
         }
+
+        print(f"Shipment data: {shipment_data}")
         
         # API call
         headers = {
@@ -66,6 +72,8 @@ class DelhiveryAPI:
         }
         
         try:
+
+            print("Sending API request to create shipment...")
             response = requests.post(
                 f"{self.base_url}/api/cmu/create.json",
                 json=shipment_data,
@@ -85,6 +93,7 @@ class DelhiveryAPI:
     
     def get_shipping_rates(self, pincode, weight=0.5):
         """Get shipping rates from Delhivery"""
+        print(f"Getting shipping rates for pincode: {pincode}, weight: {weight}")
         
         payload = {
             "pickup_pincode": self.pickup_address["pincode"],
@@ -98,6 +107,7 @@ class DelhiveryAPI:
         }
         
         try:
+            print("Sending API request to get shipping rates...")
             response = requests.get(
                 f"{self.base_url}/api/packing/charges",
                 params=payload,
@@ -116,11 +126,14 @@ class DelhiveryAPI:
     
     def generate_waybill(self):
         """Generate a waybill number"""
+
+        print("Generating waybill...")
         headers = {
             "Authorization": f"Bearer {self.api_key}"
         }
         
         try:
+            print("Sending API request to generate waybill...")
             response = requests.get(
                 f"{self.base_url}/api/waybill/generate",
                 params={"count": "1"},
@@ -138,11 +151,13 @@ class DelhiveryAPI:
     
     def print_label(self, waybill):
         """Generate shipping label"""
+        print(f"Printing label for waybill: {waybill}")
         headers = {
             "Authorization": f"Bearer {self.api_key}"
         }
         
         try:
+            print("Sending API request to print label...")
             response = requests.get(
                 f"{self.base_url}/api/print",
                 params={"waybill": waybill, "format": "pdf"},
