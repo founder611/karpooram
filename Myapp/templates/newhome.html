@@ -477,11 +477,6 @@
 
         /* ════════════════════════════════════════
            GALLERY — SAFARI / iPHONE FIXED
-           Key fixes:
-           1. Use absolute positioning for images instead of height:100%
-           2. Add -webkit- prefixes everywhere
-           3. font-size:0 on img to hide broken alt text
-           4. explicit pixel heights at every breakpoint
         ════════════════════════════════════════ */
         .gallery-section { background: var(--cream-dk); padding: 80px 0; }
         .gallery-header { text-align: center; margin-bottom: 50px; }
@@ -491,11 +486,10 @@
             margin: 0 auto;
         }
 
-        /* FIXED: use explicit height, no overflow issues */
         .gallery-track-outer {
             overflow: hidden;
             border-radius: 14px;
-            height: 560px;            /* desktop */
+            height: 560px;
             position: relative;
         }
 
@@ -523,15 +517,14 @@
         .gallery-slide {
             -webkit-flex: 1;
             flex: 1;
-            min-width: 0;             /* CRITICAL for Safari */
-            min-height: 0;            /* CRITICAL for Safari */
+            min-width: 0;
+            min-height: 0;
             position: relative;
             overflow: hidden;
             border-radius: 8px;
             background: var(--cream-dk);
         }
 
-        /* FIXED: absolute positioning — avoids Safari height:100% collapse */
         .gallery-slide img {
             position: absolute;
             top: 0; left: 0;
@@ -542,8 +535,8 @@
             -webkit-object-position: center;
             object-position: center;
             display: block;
-            font-size: 0;            /* hides broken alt text on Safari */
-            color: transparent;      /* hides broken alt text on Safari */
+            font-size: 0;
+            color: transparent;
         }
 
         .gallery-slide-caption {
@@ -827,6 +820,7 @@
         }
         .order-perks li:last-child { border: none; }
         .order-perks li i { color: var(--amber); margin-top: 3px; font-size: 0.82rem; -webkit-flex-shrink: 0; flex-shrink: 0; }
+
         .order-form {
             background: var(--white); border-radius: 12px; padding: 32px;
             border: 1px solid rgba(200,135,58,0.15);
@@ -873,6 +867,251 @@
             margin-top: 6px;
         }
         .btn-submit:hover { background: var(--amber-lt); -webkit-transform: translateY(-2px); transform: translateY(-2px); }
+
+        /* ── PRODUCT PREVIEW IMAGE (shown after pack selection) ── */
+        .product-preview {
+            display: none;
+            -webkit-align-items: center;
+            align-items: center;
+            gap: 14px;
+            background: var(--cream);
+            border: 1px solid rgba(200,135,58,0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            -webkit-animation: fadeUp .3s ease both;
+            animation: fadeUp .3s ease both;
+        }
+        .product-preview.show { display: -webkit-flex; display: flex; }
+        .product-preview img {
+            width: 64px; height: 64px;
+            -webkit-object-fit: cover;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(200,135,58,0.25);
+            -webkit-flex-shrink: 0;
+            flex-shrink: 0;
+        }
+        .product-preview-info { min-width: 0; }
+        .product-preview-info .pp-name { font-size: 0.86rem; font-weight: 600; color: var(--brown); }
+        .product-preview-info .pp-price { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+        /* ── QUANTITY STEPPER ── */
+        .qty-label {
+            display: block;
+            font-size: 0.78rem; font-weight: 500;
+            color: var(--muted); letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .qty-stepper {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            gap: 0;
+            width: -webkit-fit-content;
+            width: fit-content;
+            background: var(--cream);
+            border: 1px solid rgba(200,135,58,0.25);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .qty-btn {
+            width: 40px; height: 42px;
+            background: var(--white);
+            border: none;
+            color: var(--amber);
+            font-size: 1.1rem; font-weight: 600;
+            cursor: pointer;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-transition: background .2s, color .2s;
+            transition: background .2s, color .2s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .qty-btn:hover { background: var(--amber); color: var(--white); }
+        .qty-btn:active { background: var(--amber-lt); }
+        .qty-value {
+            min-width: 48px; text-align: center;
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ── PRICE DISPLAY ── */
+        .price-display {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--brown) 0%, var(--brown-md) 100%);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+        }
+        .price-display .price-label {
+            font-size: 0.78rem; font-weight: 500;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+        }
+        .price-display .price-amount {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem; font-weight: 600;
+            color: var(--amber-lt);
+        }
+        .price-display .price-amount .price-sub {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72rem; font-weight: 400;
+            color: rgba(255,255,255,0.55);
+            display: block;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        /* ════════════════════════════════════════
+           OTP MODAL STYLES
+        ════════════════════════════════════════ */
+        .otp-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(43, 24, 16, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: none;
+            z-index: 99999;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .otp-modal-overlay.active { display: -webkit-flex; display: flex; }
+
+        .otp-modal {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px 32px 32px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            -webkit-animation: emUp 0.4s ease forwards;
+            animation: emUp 0.4s ease forwards;
+        }
+
+        .otp-modal h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--brown);
+            margin-bottom: 6px;
+        }
+
+        .otp-modal .otp-sub {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+        }
+
+        .otp-modal .otp-sub strong {
+            color: var(--brown);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .otp-modal .otp-input-group {
+            display: -webkit-flex;
+            display: flex;
+            gap: 10px;
+            -webkit-justify-content: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-modal .otp-input-group input {
+            width: 50px;
+            height: 58px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            background: var(--cream);
+            border: 2px solid rgba(200,135,58,0.25);
+            border-radius: 10px;
+            outline: none;
+            -webkit-transition: border-color .2s;
+            transition: border-color .2s;
+        }
+
+        .otp-modal .otp-input-group input:focus {
+            border-color: var(--amber);
+        }
+
+        .otp-modal .otp-input-group input:not(:placeholder-shown) {
+            background: var(--white);
+        }
+
+        .otp-modal .otp-error {
+            color: #d62828;
+            font-size: 0.82rem;
+            margin-bottom: 12px;
+            display: none;
+            min-height: 24px;
+        }
+
+        .otp-modal .otp-error.show { display: block; }
+
+        .otp-modal .otp-resend {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        .otp-modal .otp-resend button {
+            background: none;
+            border: none;
+            color: var(--amber);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .otp-modal .otp-resend button:disabled {
+            color: var(--muted);
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .otp-modal .otp-resend span {
+            color: var(--muted);
+        }
+
+        .otp-modal .btn-verify {
+            width: 100%;
+            padding: 14px;
+            background: var(--amber);
+            color: var(--brown);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            cursor: pointer;
+            -webkit-transition: background .2s;
+            transition: background .2s;
+        }
+
+        .otp-modal .btn-verify:hover { background: var(--amber-lt); }
+        .otp-modal .btn-verify:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* ── FOOTER ── */
         .footer { background: var(--brown); color: rgba(255,255,255,0.7); padding: 60px 0 0; }
@@ -1066,15 +1305,12 @@
         .em-close:hover { color: #C8873A; }
 
         /* ════════════════════════════════════════
-           RESPONSIVE BREAKPOINTS — ALL DEVICES
+           RESPONSIVE BREAKPOINTS
         ════════════════════════════════════════ */
-
-        /* ── LARGE DESKTOP: 1280px+ ── */
         @media (min-width: 1280px) {
             .gallery-track-outer { height: 580px; }
         }
 
-        /* ── DESKTOP / LAPTOP: 1100px ── */
         @media (max-width: 1100px) {
             .about-grid { grid-template-columns: 1fr 320px 1fr; gap: 36px; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
@@ -1083,7 +1319,6 @@
             .gallery-next { right: -14px; }
         }
 
-        /* ── TABLET LANDSCAPE / SMALL LAPTOP: 960px ── */
         @media (max-width: 960px) {
             .gallery-track-outer { height: 380px; }
             .gallery-prev { left: -14px; }
@@ -1091,7 +1326,6 @@
             .gallery-btn { width: 40px; height: 40px; font-size: 0.9rem; }
         }
 
-        /* ── TABLET PORTRAIT / LARGE PHONE: 900px ── */
         @media (max-width: 900px) {
             .nav-links { display: none; }
             .hamburger { display: -webkit-flex; display: flex; }
@@ -1106,7 +1340,6 @@
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
         }
 
-        /* ── TABLET: 768px (iPad) ── */
         @media (max-width: 768px) {
             .gallery-track-outer { height: 320px; }
             .gallery-prev { left: 8px; }
@@ -1116,9 +1349,13 @@
                 background: rgba(43,24,16,0.75);
                 color: var(--amber);
             }
+            .otp-modal .otp-input-group input {
+                width: 40px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
         }
 
-        /* ── LARGE PHONE: 640px ── */
         @media (max-width: 640px) {
             .container { padding: 0 16px; }
             .section-pad { padding: 48px 0; }
@@ -1143,8 +1380,6 @@
             .footer-bottom { -webkit-flex-direction: column; flex-direction: column; text-align: center; gap: 8px; }
             #em-popup { left: 12px; bottom: 12px; }
             .em-toast { width: calc(100vw - 24px); max-width: 320px; }
-
-            /* Gallery mobile */
             .gallery-track-outer { height: 240px; border-radius: 10px; }
             .gallery-prev { left: 8px; }
             .gallery-next { right: 8px; }
@@ -1157,41 +1392,53 @@
             .gallery-slide-caption { padding: 14px 12px 10px; }
             .gallery-slide-caption span { font-size: 0.7rem; letter-spacing: 1.5px; }
             .gallery-slide-caption p { display: none; }
+            .otp-modal { padding: 28px 20px 24px; }
+            .otp-modal .otp-input-group { gap: 6px; }
+            .otp-modal .otp-input-group input {
+                width: 36px;
+                height: 44px;
+                font-size: 1rem;
+            }
         }
 
-        /* ── iPHONE SE / SMALL ANDROID: 430px ── */
         @media (max-width: 430px) {
             .gallery-track-outer { height: 210px; }
             .brand-name { font-size: 1.15rem; letter-spacing: 2px; }
+            .otp-modal .otp-input-group input {
+                width: 32px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
         }
 
-        /* ── iPHONE SE / VERY SMALL: 380px ── */
         @media (max-width: 380px) {
             .brand-name { font-size: 1.1rem; letter-spacing: 2px; }
             .hero-title { font-size: 2.4rem; }
             .about-img-wrap img { height: 260px; }
             .section-heading { font-size: 1.75rem; }
             .gallery-track-outer { height: 180px; }
+            .otp-modal .otp-input-group input {
+                width: 28px;
+                height: 36px;
+                font-size: 0.8rem;
+            }
+            .otp-modal .otp-input-group { gap: 4px; }
         }
 
-        /* ── iPHONE 12/13/14 PRO MAX (430px portrait) specific ── */
         @media only screen and (max-width: 430px) and (-webkit-min-device-pixel-ratio: 2) {
             .gallery-track-outer { height: 220px; }
             .gallery-slide img { font-size: 0; color: transparent; }
         }
 
-        /* ── iPHONE 12/13/14 standard (390px) ── */
         @media only screen and (max-width: 390px) and (-webkit-min-device-pixel-ratio: 2) {
             .gallery-track-outer { height: 200px; }
         }
 
-        /* ── iPHONE SE 2nd/3rd gen (375px) ── */
         @media only screen and (max-width: 375px) and (-webkit-min-device-pixel-ratio: 2) {
             .gallery-track-outer { height: 185px; }
             .section-heading { font-size: 1.7rem; }
         }
 
-        /* ── SAFE AREA for notched iPhones (X, 11, 12, 13, 14, 15) ── */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
             #em-popup {
                 bottom: calc(20px + env(safe-area-inset-bottom));
@@ -1207,7 +1454,7 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
     <a href="#" class="navbar-brand">
-        <img src="{% static 'homepage/img/logo.jpeg' %}" alt="Ecomonks logo – plant-based and eco-conscious spiritual products" onerror="this.onerror=null;this.src='https://placehold.co/40x40/C8873A/FDF6EC?text=EC'">
+        <img src="{% static 'homepage/img/logo.jpeg' %}" alt="Ecomonks logo" onerror="this.onerror=null;this.src='https://placehold.co/40x40/C8873A/FDF6EC?text=EC'">
         <span class="brand-name">Ecomonks</span>
     </a>
     <ul class="nav-links">
@@ -1215,9 +1462,7 @@
         <li><a href="#about">About</a></li>
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="/blog/">Blog</a></li>
-        <!-- <li><a href="#speciality">Service</a></li> -->
         <li><a href="#testimonials">Reviews</a></li>
-        <!-- <li><a href="#order">Products</a></li> -->
         <li><a href="#footer">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -1359,378 +1604,109 @@
 </section>
 
 <!-- VIDEOS -->
-<!-- VIDEOS -->
-
 <section class="videos-gallery-section" id="videos">
     <div class="container">
         <div class="video-header">
             <div class="section-label">Watch Our Videos</div>
             <h2 class="section-heading">Explore <em>Divine Moments</em></h2>
             <p class="video-subtitle">
-                Witness the purity and traditional craftsmanship behind every batch of Bhimseni Karpooram
+                Witness the purity and traditional craftsmanship behind every batch of Bhimseni Karpooram.
             </p>
         </div>
-    <div class="videos-slider-wrapper">
-        <button class="scroll-btn left-btn" id="scrollLeft">&#10094;</button>
 
-        <div class="videos-scroll" id="videosScroll">
-
-            <!-- Video 1 -->
-            <div class="video-card">
-                <a href="https://www.youtube.com/watch?v=ZUTLEthA94E"
-                   target="_blank"
-                   class="video-thumbnail">
-                    <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg"
-                         alt="Pure Bhimseni Camphor">
-                    <div class="play-btn">▶</div>
-                </a>
-
-                <div class="video-title">
-                    <h4>Pure Bhimseni Camphor</h4>
-                    <p>Premium A++ Grade</p>
-                </div>
-            </div>
-
-            <!-- Video 2 -->
-            <div class="video-card">
-                <a href="https://www.youtube.com/watch?v=ZUTLEthA94E"
-                   target="_blank"
-                   class="video-thumbnail">
-                    <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg"
-                         alt="Traditional Craftsmanship">
-                    <div class="play-btn">▶</div>
-                </a>
-
-                <div class="video-title">
-                    <h4>Traditional Craftsmanship</h4>
-                    <p>Temple Quality</p>
-                </div>
-            </div>
-
-            <!-- Video 3 -->
-            <div class="video-card">
-                <a href="https://www.youtube.com/watch?v=ZUTLEthA94E"
-                   target="_blank"
-                   class="video-thumbnail">
-                    <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg"
-                         alt="Divine Aroma">
-                    <div class="play-btn">▶</div>
-                </a>
-
-                <div class="video-title">
-                    <h4>Divine Aroma</h4>
-                    <p>Long Lasting Fragrance</p>
-                </div>
-            </div>
-
-            <!-- Video 4 -->
-            <div class="video-card">
-                <a href="https://www.youtube.com/watch?v=ZUTLEthA94E"
-                   target="_blank"
-                   class="video-thumbnail">
-                    <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg"
-                         alt="Spiritual Essence">
-                    <div class="play-btn">▶</div>
-                </a>
-
-                <div class="video-title">
-                    <h4>Spiritual Essence</h4>
-                    <p>Pure Natural Product</p>
-                </div>
-            </div>
-
-            <!-- Video 5 -->
-            <div class="video-card">
-                <a href="https://www.youtube.com/watch?v=ZUTLEthA94E"
-                   target="_blank"
-                   class="video-thumbnail">
-                    <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg"
-                         alt="Traditional Rituals">
-                    <div class="play-btn">▶</div>
-                </a>
-
-                <div class="video-title">
-                    <h4>Traditional Rituals</h4>
-                    <p>Authentic Bhimseni</p>
-                </div>
-            </div>
-
-        </div>
-
-        <button class="scroll-btn right-btn" id="scrollRight">&#10095;</button>
-    </div>
-</div>
-</section>
-
-<style>
-.videos-gallery-section{
-    padding:80px 0;
-    background:#fdf6ec;
-    overflow:hidden;
-}
-
-.video-header{
-    text-align:center;
-    margin-bottom:45px;
-}
-
-.video-subtitle{
-    color:#777;
-    margin-top:10px;
-}
-
-.videos-slider-wrapper{
-    position:relative;
-    display:flex;
-    align-items:center;
-}
-
-.videos-scroll{
-    display:flex;
-    gap:25px;
-    overflow-x:auto;
-    scroll-behavior:smooth;
-    scrollbar-width:none;
-    width:100%;
-}
-
-.videos-scroll::-webkit-scrollbar{
-    display:none;
-}
-
-.video-card{
-    min-width:320px;
-    max-width:320px;
-    flex:0 0 auto;
-}
-
-.video-thumbnail{
-    position:relative;
-    display:block;
-    width:100%;
-    height:560px;
-    overflow:hidden;
-    border-radius:22px;
-    box-shadow:0 12px 30px rgba(0,0,0,0.2);
-}
-
-.video-thumbnail img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-}
-
-.play-btn{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:80px;
-    height:80px;
-    border-radius:50%;
-    background:#ff0000;
-    color:#fff;
-    font-size:36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    transition:.3s;
-}
-
-.video-thumbnail:hover .play-btn{
-    transform:translate(-50%,-50%) scale(1.1);
-}
-
-.video-title{
-    text-align:center;
-    margin-top:14px;
-}
-
-.video-title h4{
-    font-size:20px;
-    color:#2b1810;
-    margin-bottom:5px;
-}
-
-.video-title p{
-    color:#777;
-    font-size:14px;
-}
-
-.scroll-btn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:50px;
-    height:50px;
-    border:none;
-    border-radius:50%;
-    background:#c8873a;
-    color:#fff;
-    font-size:24px;
-    cursor:pointer;
-    z-index:10;
-}
-
-.left-btn{
-    left:-10px;
-}
-
-.right-btn{
-    right:-10px;
-}
-
-@media(max-width:768px){
-    .video-card{
-        min-width:240px;
-        max-width:240px;
-    }
-
-    .video-thumbnail{
-        height:430px;
-    }
-}
-
-@media(max-width:480px){
-    .video-card{
-        min-width:200px;
-        max-width:200px;
-    }
-
-    .video-thumbnail{
-        height:355px;
-    }
-}
-</style>
-
-
-
-
-<!-- <section class="videos-gallery-section" id="videos">
-    <div class="container">
-        <div class="video-header">
-            <div class="section-label">Watch Our Videos</div>
-            <h2 class="section-heading">Explore <em>Divine Moments</em></h2>
-            <p class="video-subtitle">Witness the purity and traditional craftsmanship behind every batch of Bhimseni karpooram</p>
-        </div>
         <div class="videos-slider-wrapper">
             <button class="scroll-btn left-btn" id="scrollLeft">&#10094;</button>
+
             <div class="videos-scroll" id="videosScroll">
+
+                <!-- Video 1 -->
                 <div class="video-card">
-                    <div class="youtube-embed">
-                        <iframe
-                            src="https://www.youtube.com/embed/GHzY_0PyNX8"
-                            width="100%"
-                            height="560"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            allowfullscreen>
-                        </iframe>
+                    <a href="https://www.youtube.com/watch?v=ZUTLEthA94E" target="_blank" class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/ZUTLEthA94E/maxresdefault.jpg" alt="Pure Bhimseni Camphor">
+                        <div class="play-btn">▶</div>
+                    </a>
+                    <div class="video-title">
+                        <h4>Pure Bhimseni Camphor</h4>
+                        <p>Premium A++ Grade</p>
                     </div>
-                    <div class="video-title"><h4>Pure Bhimseni Camphor</h4><p>Premium A++ Grade</p></div>
                 </div>
+
+                <!-- Video 2 -->
                 <div class="video-card">
-                    <div class="youtube-embed">
-                        <iframe
-                            src="https://www.youtube.com/embed/GHzY_0PyNX8"
-                            width="100%"
-                            height="560"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            allowfullscreen>
-                        </iframe>
+                    <a href="https://youtube.com/shorts/OAzAp8QV-uc?si=lim9ieV-72O1Kgb7" target="_blank" class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/OAzAp8QV-uc/maxresdefault.jpg" alt="Traditional Craftsmanship">
+                        <div class="play-btn">▶</div>
+                    </a>
+                    <div class="video-title">
+                        <h4>Traditional Craftsmanship</h4>
+                        <p>Temple Quality</p>
                     </div>
-                    <div class="video-title"><h4>Traditional Craftsmanship</h4><p>Temple Quality</p></div>
                 </div>
+
+                <!-- Video 3 -->
                 <div class="video-card">
-                    <div class="youtube-embed">
-                        <iframe
-                            src="https://www.youtube.com/embed/GHzY_0PyNX8"
-                            width="100%"
-                            height="560"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            allowfullscreen>
-                        </iframe>
+                    <a href="https://youtube.com/shorts/EFV3-zjotD0?si=DmWJ2kZDXRjxA5IA" target="_blank" class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/EFV3-zjotD0/maxresdefault.jpg" alt="Divine Aroma">
+                        <div class="play-btn">▶</div>
+                    </a>
+                    <div class="video-title">
+                        <h4>Divine Aroma</h4>
+                        <p>Long Lasting Fragrance</p>
                     </div>
-                    <div class="video-title"><h4>Divine Aroma</h4><p>Long Lasting Fragrance</p></div>
                 </div>
+
+                <!-- Video 4 -->
                 <div class="video-card">
-                    <div class="youtube-embed">
-                        <iframe
-                            src="https://www.youtube.com/embed/GHzY_0PyNX8"
-                            width="100%"
-                            height="560"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            allowfullscreen>
-                        </iframe>
+                    <a href="https://youtube.com/shorts/3lFPJm7iaKA?si=tLgvdYiapo3KQ_W9" target="_blank" class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/3lFPJm7iaKA/maxresdefault.jpg" alt="Spiritual Essence">
+                        <div class="play-btn">▶</div>
+                    </a>
+                    <div class="video-title">
+                        <h4>Spiritual Essence</h4>
+                        <p>Pure Natural Product</p>
                     </div>
-                    <div class="video-title"><h4>Spiritual Essence</h4><p>Pure Natural Product</p></div>
                 </div>
+
+                <!-- Video 5 -->
                 <div class="video-card">
-                    <div class="youtube-embed">
-                        <iframe
-                            src="https://www.youtube.com/embed/GHzY_0PyNX8"
-                            width="100%"
-                            height="560"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-                            allowfullscreen>
-                        </iframe>
+                    <a href="https://youtube.com/shorts/OAzAp8QV-uc?si=lim9ieV-72O1Kgb7" target="_blank" class="video-thumbnail">
+                        <img src="https://img.youtube.com/vi/OAzAp8QV-uc/maxresdefault.jpg" alt="Traditional Rituals">
+                        <div class="play-btn">▶</div>
+                    </a>
+                    <div class="video-title">
+                        <h4>Traditional Rituals</h4>
+                        <p>Authentic Bhimseni</p>
                     </div>
-                    <div class="video-title"><h4>Traditional Rituals</h4><p>Authentic Bhimseni</p></div>
                 </div>
+
             </div>
+
             <button class="scroll-btn right-btn" id="scrollRight">&#10095;</button>
         </div>
     </div>
 </section>
 
 <style>
-.videos-gallery-section { padding: 80px 0; background: #fdf6ec; overflow: hidden; }
-.video-header { text-align: center; margin-bottom: 45px; }
-.video-subtitle { color: #777; margin-top: 10px; }
-.videos-slider-wrapper { position: relative; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
-.videos-scroll {
-    display: -webkit-flex; display: flex;
-    gap: 25px; overflow-x: auto;
-    scroll-behavior: smooth; scrollbar-width: none;
-    -ms-overflow-style: none; width: 100%;
-    -webkit-overflow-scrolling: touch;
-}
-.videos-scroll::-webkit-scrollbar { display: none; }
-.video-card { min-width: 320px; max-width: 320px; -webkit-flex: 0 0 auto; flex: 0 0 auto; }
-.youtube-embed {
-    position: relative; width: 100%; height: 560px;
-    border-radius: 22px; overflow: hidden; background: #000;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-}
-.youtube-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-.video-title { text-align: center; margin-top: 14px; }
-.video-title h4 { font-size: 20px; color: #2b1810; margin-bottom: 5px; }
-.video-title p { color: #777; font-size: 14px; }
-.scroll-btn {
-    position: absolute; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%);
-    width: 50px; height: 50px; border: none; border-radius: 50%;
-    background: #c8873a; color: white; font-size: 24px; cursor: pointer;
-    z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    -webkit-transition: 0.3s; transition: 0.3s;
-}
-.scroll-btn:hover { background: #a96d28; -webkit-transform: translateY(-50%) scale(1.08); transform: translateY(-50%) scale(1.08); }
-.left-btn { left: -10px; }
-.right-btn { right: -10px; }
-@media(max-width: 768px) {
-    .video-card { min-width: 240px; max-width: 240px; }
-    .youtube-embed { height: 430px; }
-    .scroll-btn { width: 40px; height: 40px; font-size: 18px; }
-}
-@media(max-width: 480px) {
-    .video-card { min-width: 200px; max-width: 200px; }
-    .youtube-embed { height: 355px; }
-}
-</style> -->
+.videos-gallery-section { padding:80px 0; background:#fdf6ec; overflow:hidden; }
+.video-header { text-align:center; margin-bottom:45px; }
+.video-subtitle { color:#777; margin-top:10px; }
+.videos-slider-wrapper { position:relative; display:flex; align-items:center; }
+.videos-scroll { display:flex; gap:25px; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; width:100%; }
+.videos-scroll::-webkit-scrollbar { display:none; }
+.video-card { min-width:320px; max-width:320px; flex:0 0 auto; }
+.video-thumbnail { position:relative; display:block; width:100%; height:560px; overflow:hidden; border-radius:22px; box-shadow:0 12px 30px rgba(0,0,0,0.2); }
+.video-thumbnail img { width:100%; height:100%; object-fit:cover; display:block; }
+.play-btn { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:80px; height:80px; border-radius:50%; background:#ff0000; color:#fff; font-size:36px; display:flex; align-items:center; justify-content:center; transition:.3s; }
+.video-thumbnail:hover .play-btn { transform:translate(-50%,-50%) scale(1.1); }
+.video-title { text-align:center; margin-top:14px; }
+.video-title h4 { font-size:20px; color:#2b1810; margin-bottom:5px; }
+.video-title p { color:#777; font-size:14px; }
+.scroll-btn { position:absolute; top:50%; transform:translateY(-50%); width:50px; height:50px; border:none; border-radius:50%; background:#c8873a; color:#fff; font-size:24px; cursor:pointer; z-index:10; }
+.left-btn { left:-10px; }
+.right-btn { right:-10px; }
+@media(max-width:768px){ .video-card { min-width:240px; max-width:240px; } .video-thumbnail { height:430px; } }
+@media(max-width:480px){ .video-card { min-width:200px; max-width:200px; } .video-thumbnail { height:355px; } }
+</style>
 
 <!-- SPECIALITY -->
 <section class="spec section-pad" id="speciality">
@@ -1870,7 +1846,8 @@
     </div>
 </section>
 
-<!-- ORDER -->
+<!-- ORDER SECTION WITH OTP VERIFICATION -->
+ 
 <section class="order-section section-pad" id="order">
     <div class="container">
         <div class="order-wrapper">
@@ -1887,25 +1864,99 @@
             </div>
             <div class="order-form">
                 <h3>Order Now</h3>
-                <form method="post" action="order_post/">
-                    {% csrf_token %}
-                    <div class="form-field"><input type="text" name="name" placeholder="Your Full Name" required></div>
-                    <div class="form-field"><input type="email" name="email" placeholder="Email Address" required></div>
-                    <div class="form-field"><input type="tel" name="phone" placeholder="Contact Number" required></div>
-                    <div class="form-field"><input type="text" name="address" placeholder="Delivery Address" required></div>
+
+                <!-- Hidden fields to store order data -->
+                <input type="hidden" id="orderName" value="">
+                <input type="hidden" id="orderEmail" value="">
+                <input type="hidden" id="orderPhone" value="">
+                <input type="hidden" id="orderAddress" value="">
+                <input type="hidden" id="orderQuantity" value="">
+                <input type="hidden" id="orderPackCount" value="1">
+                <input type="hidden" id="orderTotalPrice" value="">
+
+                <!-- Order Form -->
+                <div id="orderFormContent">
                     <div class="form-field">
-                        <select name="quantity" required>
+                        <input type="text" id="formName" placeholder="Your Full Name" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="email" id="formEmail" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="tel" id="formPhone" placeholder="Contact Number" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="formAddress" placeholder="Delivery Address" required>
+                    </div>
+                    <div class="form-field">
+                        <select id="formQuantity" required>
                             <option value="" disabled selected>Select Quantity</option>
                             <option value="50g">50g Pack</option>
                             <option value="175g">175g Pack</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-submit">Buy Now</button>
-                </form>
+
+                    <!-- Product image preview: swaps automatically based on pack selected above -->
+                    <div class="product-preview" id="productPreview">
+                        <img id="productPreviewImg" src="" alt="Selected karpooram pack">
+                        <div class="product-preview-info">
+                            <div class="pp-name" id="productPreviewName"></div>
+                            <div class="pp-price" id="productPreviewPrice"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <span class="qty-label">Number of Packs</span>
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                            <span class="qty-value" id="qtyValue">1</span>
+                            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+
+                    <div class="price-display">
+                        <span class="price-label">Total</span>
+                        <span class="price-amount" id="priceAmount">₹0</span>
+                    </div>
+
+                    <button type="button" class="btn-submit" id="sendOtpBtn">
+                        <i class="fa fa-envelope" style="margin-right:8px;"></i> Continue &amp; Verify Email
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- OTP MODAL -->
+<div class="otp-modal-overlay" id="otpModal">
+    <div class="otp-modal">
+        <h2>🔐 Verify Your Email</h2>
+        <p class="otp-sub">
+            We've sent a 6-digit code to<br>
+            <strong id="otpEmailDisplay">your@email.com</strong>
+        </p>
+
+        <div class="otp-input-group" id="otpInputs">
+            <input type="text" maxlength="1" class="otp-digit" data-index="0" placeholder="•" autofocus>
+            <input type="text" maxlength="1" class="otp-digit" data-index="1" placeholder="•">
+            <input type="text" maxlength="1" class="otp-digit" data-index="2" placeholder="•">
+            <input type="text" maxlength="1" class="otp-digit" data-index="3" placeholder="•">
+            <input type="text" maxlength="1" class="otp-digit" data-index="4" placeholder="•">
+            <input type="text" maxlength="1" class="otp-digit" data-index="5" placeholder="•">
+        </div>
+
+        <div class="otp-error" id="otpError">Invalid OTP. Please try again.</div>
+
+        <div class="otp-resend">
+            Didn't receive the code?
+            <button type="button" id="resendOtp">Resend OTP</button>
+            <span id="resendTimer" style="display:none; color:var(--muted);">(30s)</span>
+        </div>
+
+        <button class="btn-verify" id="verifyOtpBtn">Verify &amp; Place Order</button>
+    </div>
+</div>
 
 <!-- FOOTER -->
 <footer class="footer" id="footer">
@@ -2017,7 +2068,7 @@
     });
     slideTimer = setInterval(function(){ heroGoTo(heroCur + 1); }, 5000);
 
-    /* ── GALLERY CAROUSEL — SAFARI FIXED ── */
+    /* ── GALLERY CAROUSEL ── */
     (function(){
         var track    = document.getElementById('galleryTrack');
         var dotsWrap = document.getElementById('galleryDots');
@@ -2027,7 +2078,6 @@
         var cur      = 0;
         var autoTimer = null;
 
-        /* Build dots */
         for (var i = 0; i < total; i++) {
             (function(idx){
                 var d = document.createElement('button');
@@ -2042,7 +2092,6 @@
 
         function goTo(n) {
             cur = (n + total) % total;
-            /* Use translateX on the track — works on all browsers */
             track.style.webkitTransform = 'translateX(-' + (cur * 100) + '%)';
             track.style.transform       = 'translateX(-' + (cur * 100) + '%)';
             getDots().forEach(function(d, i){ d.classList.toggle('active', i === cur); });
@@ -2057,7 +2106,6 @@
         document.getElementById('galleryPrev').addEventListener('click', function(){ goTo(cur - 1); resetAuto(); });
         document.getElementById('galleryNext').addEventListener('click', function(){ goTo(cur + 1); resetAuto(); });
 
-        /* Touch swipe */
         var startX = 0;
         track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, { passive: true });
         track.addEventListener('touchend', function(e){
@@ -2181,6 +2229,377 @@
             showPopup();
             setTimeout(loop, 15000);
         }, 3000);
+    })();
+
+    /* ════════════════════════════════════════
+       PRODUCT IMAGE SWAP + QTY STEPPER + AUTO PRICE
+       (custom site — not Shopify, so this is all
+       plain JS. Edit PRODUCT_DATA below to change
+       images / prices / bundle tiers.)
+    ════════════════════════════════════════ */
+    (function(){
+        // NOTE: swap these image paths for your real files.
+        // 50g uses the path you gave me. I've guessed a matching
+        // filename for 175g (karpooram175.png) — rename it on
+        // disk to match, or tell me the real filename and I'll update it.
+        var PRODUCT_DATA = {
+            '50g': {
+                label: '50g Pack',
+                image: "{% static 'homepage/img/karpooram50.png' %}",
+                // qty : price (₹) — from your bundle sheet
+                tiers: { 1: 199, 2: 349, 4: 649 }
+            },
+            '175g': {
+                label: '175g Pack',
+                image: "{% static 'homepage/img/karpooram175.png' %}",
+                tiers: { 1: 549, 2: 999, 4: 1899 }
+            }
+        };
+
+        var formQuantitySel = document.getElementById('formQuantity');
+        var productPreview  = document.getElementById('productPreview');
+        var previewImg      = document.getElementById('productPreviewImg');
+        var previewName     = document.getElementById('productPreviewName');
+        var previewPrice    = document.getElementById('productPreviewPrice');
+        var qtyMinusBtn     = document.getElementById('qtyMinus');
+        var qtyPlusBtn      = document.getElementById('qtyPlus');
+        var qtyValueEl      = document.getElementById('qtyValue');
+        var priceAmountEl   = document.getElementById('priceAmount');
+        var orderPackCount  = document.getElementById('orderPackCount');
+        var orderTotalPrice = document.getElementById('orderTotalPrice');
+
+        var packCount = 1;
+
+        // Price for N packs of a given size, using the nearest
+        // bundle tier below/at N, then per-unit rate for any extra.
+        function priceFor(packKey, qty) {
+            var data = PRODUCT_DATA[packKey];
+            if (!data) return 0;
+            var tiers = data.tiers;
+            if (tiers[qty] !== undefined) return tiers[qty];
+
+            var tierQtys = Object.keys(tiers).map(Number).sort(function(a,b){ return a-b; });
+            var highest = tierQtys[tierQtys.length - 1];
+
+            if (qty > highest) {
+                var perUnit = tiers[highest] / highest;
+                return Math.round(perUnit * qty);
+            }
+            // qty falls between two defined tiers (e.g. 3 between 2 and 4):
+            // use the lower tier's per-unit rate for the extra packs.
+            var lowerQty = tierQtys[0];
+            for (var i = 0; i < tierQtys.length; i++) {
+                if (tierQtys[i] <= qty) lowerQty = tierQtys[i];
+            }
+            var basePerUnit = tiers[lowerQty] / lowerQty;
+            return Math.round(basePerUnit * qty);
+        }
+
+        function updateAll() {
+            var packKey = formQuantitySel.value;
+
+            if (!packKey) {
+                productPreview.classList.remove('show');
+                priceAmountEl.textContent = '₹0';
+                orderTotalPrice.value = '';
+                orderPackCount.value = packCount;
+                return;
+            }
+
+            var data = PRODUCT_DATA[packKey];
+
+            // Show matching product image
+            previewImg.src = data.image;
+            previewImg.alt = data.label + ' – Ecomonks Divya Bhimseni Karpooram';
+            previewName.textContent = data.label;
+            productPreview.classList.add('show');
+
+            // Auto-calculate price
+            var total = priceFor(packKey, packCount);
+            priceAmountEl.textContent = '₹' + total.toLocaleString('en-IN');
+            previewPrice.textContent = packCount + ' × ' + data.label + ' = ₹' + total.toLocaleString('en-IN');
+
+            orderTotalPrice.value = total;
+            orderPackCount.value = packCount;
+        }
+
+        formQuantitySel.addEventListener('change', updateAll);
+
+        qtyMinusBtn.addEventListener('click', function(){
+            if (packCount > 1) packCount--;
+            qtyValueEl.textContent = packCount;
+            updateAll();
+        });
+        qtyPlusBtn.addEventListener('click', function(){
+            if (packCount < 20) packCount++;
+            qtyValueEl.textContent = packCount;
+            updateAll();
+        });
+
+        // Initialize on load in case a value is prefilled
+        updateAll();
+    })();
+
+    /* ════════════════════════════════════════
+       OTP VERIFICATION — COMPLETE
+    ════════════════════════════════════════ */
+    (function(){
+        // DOM Elements
+        var otpModal     = document.getElementById('otpModal');
+        var otpInputs    = document.querySelectorAll('.otp-digit');
+        var verifyBtn    = document.getElementById('verifyOtpBtn');
+        var resendBtn    = document.getElementById('resendOtp');
+        var resendTimer  = document.getElementById('resendTimer');
+        var otpError     = document.getElementById('otpError');
+        var otpEmailDisplay = document.getElementById('otpEmailDisplay');
+        var sendOtpBtn   = document.getElementById('sendOtpBtn');
+
+        // Hidden fields
+        var orderName    = document.getElementById('orderName');
+        var orderEmail   = document.getElementById('orderEmail');
+        var orderPhone   = document.getElementById('orderPhone');
+        var orderAddress = document.getElementById('orderAddress');
+        var orderQuantity = document.getElementById('orderQuantity');
+
+        // Form fields
+        var formName     = document.getElementById('formName');
+        var formEmail    = document.getElementById('formEmail');
+        var formPhone    = document.getElementById('formPhone');
+        var formAddress  = document.getElementById('formAddress');
+        var formQuantity = document.getElementById('formQuantity');
+
+        var otpTimer     = null;
+        var otpCountdown = 30;
+
+        // Get CSRF Token
+        function getCsrfToken() {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                var parts = cookie.split('=');
+                if (parts[0] === 'csrftoken') {
+                    return parts[1];
+                }
+            }
+            return '';
+        }
+
+        // Send OTP Button
+        sendOtpBtn.addEventListener('click', function() {
+            var name = formName.value.trim();
+            var email = formEmail.value.trim();
+            var phone = formPhone.value.trim();
+            var address = formAddress.value.trim();
+            var quantity = formQuantity.value;
+
+            if (!name || !email || !phone || !address || !quantity) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            // Store order data
+            orderName.value = name;
+            orderEmail.value = email;
+            orderPhone.value = phone;
+            orderAddress.value = address;
+            orderQuantity.value = quantity;
+
+            // Show OTP modal
+            otpEmailDisplay.textContent = email;
+            otpModal.classList.add('active');
+            otpError.classList.remove('show');
+            otpInputs.forEach(function(inp) { inp.value = ''; });
+            otpInputs[0].focus();
+
+            // Send OTP via AJAX
+            sendOtpToEmail(email);
+            startResendTimer();
+        });
+
+        // OTP Input Auto-focus
+        otpInputs.forEach(function(input, index) {
+            input.addEventListener('input', function(e) {
+                var value = this.value;
+                if (value.length === 1 && index < 5) {
+                    otpInputs[index + 1].focus();
+                }
+                // Auto-submit when all filled
+                if (index === 5 && value.length === 1) {
+                    setTimeout(verifyOtp, 100);
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            // Allow only numbers
+            input.addEventListener('keypress', function(e) {
+                if (!/[0-9]/.test(e.key)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Verify OTP
+        verifyBtn.addEventListener('click', verifyOtp);
+
+        function verifyOtp() {
+            var otp = '';
+            otpInputs.forEach(function(inp) { otp += inp.value; });
+            if (otp.length !== 6) {
+                otpError.textContent = 'Please enter all 6 digits';
+                otpError.classList.add('show');
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/verify-otp/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', getCsrfToken());
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.verified) {
+                            otpModal.classList.remove('active');
+                            submitOrder();
+                        } else {
+                            otpError.textContent = data.message || 'Invalid OTP. Please try again.';
+                            otpError.classList.add('show');
+                            verifyBtn.disabled = false;
+                            verifyBtn.textContent = 'Verify & Place Order';
+                            otpInputs.forEach(function(inp) { inp.value = ''; });
+                            otpInputs[0].focus();
+                        }
+                    } catch (e) {
+                        otpError.textContent = 'Something went wrong. Please try again.';
+                        otpError.classList.add('show');
+                        verifyBtn.disabled = false;
+                        verifyBtn.textContent = 'Verify & Place Order';
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify({
+                otp: otp,
+                email: orderEmail.value
+            }));
+        }
+
+        // Submit order after verification
+        function submitOrder() {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/order_post/';
+
+            var fields = {
+                name: orderName.value,
+                email: orderEmail.value,
+                phone: orderPhone.value,
+                address: orderAddress.value,
+                quantity: orderQuantity.value,
+                pack_count: document.getElementById('orderPackCount').value,
+                total_price: document.getElementById('orderTotalPrice').value
+            };
+
+            for (var key in fields) {
+                if (fields.hasOwnProperty(key)) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                }
+            }
+
+            // Add CSRF token
+            var csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = 'csrfmiddlewaretoken';
+            csrf.value = getCsrfToken();
+            form.appendChild(csrf);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // Send OTP via AJAX
+        function sendOtpToEmail(email) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/send-otp/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', getCsrfToken());
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (data.status === 'success') {
+                            console.log('OTP sent to email');
+                        } else {
+                            console.error('Failed to send OTP:', data.message);
+                        }
+                    } catch (e) {
+                        console.error('Error sending OTP:', e);
+                    }
+                }
+            };
+
+            xhr.send(JSON.stringify({ email: email }));
+        }
+
+        // Resend OTP
+        resendBtn.addEventListener('click', function() {
+            var email = orderEmail.value;
+            if (email) {
+                sendOtpToEmail(email);
+                startResendTimer();
+                otpError.classList.remove('show');
+            }
+        });
+
+        function startResendTimer() {
+            otpCountdown = 30;
+            resendBtn.style.display = 'none';
+            resendTimer.style.display = 'inline';
+            clearInterval(otpTimer);
+
+            otpTimer = setInterval(function() {
+                otpCountdown--;
+                resendTimer.textContent = '(' + otpCountdown + 's)';
+                if (otpCountdown <= 0) {
+                    clearInterval(otpTimer);
+                    resendBtn.style.display = 'inline';
+                    resendTimer.style.display = 'none';
+                }
+            }, 1000);
+        }
+
+        // Close modal on outside click
+        otpModal.addEventListener('click', function(e) {
+            if (e.target === otpModal) {
+                // Don't close on outside click to prevent accidental loss
+                // Only close if user clicks the close button
+            }
+        });
+
+        // Allow Enter key to submit OTP
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && otpModal.classList.contains('active')) {
+                var activeElement = document.activeElement;
+                if (activeElement.classList && activeElement.classList.contains('otp-digit')) {
+                    verifyOtp();
+                }
+            }
+        });
+
     })();
 </script>
 </body>

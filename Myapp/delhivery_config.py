@@ -6,14 +6,14 @@ import base64
 class DelhiveryAPI:
     def __init__(self):
         self.base_url = "https://track.delhivery.com"  # Production URL
-        self.api_key = "YOUR_DELHIVERY_API_KEY"  # Get from Delhivery dashboard
+        self.api_key = "e1699e2152af513b14662e0a587606854ef9e5c6"  # Get from Delhivery dashboard
         self.pickup_address = {
             "name": "Ecomonks",
-            "address": "Yathisha Bliss No 9/329, Moorkanikkara Kozhukully PO",
+            "address": "Global Avenue Opp SIB Aranattukara Branch Thoppinmoola Poothole",
             "city": "Thrissur",
             "state": "Kerala",
-            "pincode": "680752",
-            "phone": "9845736584"
+            "pincode": "680004",
+            "phone": "7204610007"
         }
         
     def create_shipment(self, order_data):
