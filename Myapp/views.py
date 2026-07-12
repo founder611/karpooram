@@ -10,7 +10,6 @@ import requests
 
 # Import Supabase
 from supabase import create_client
-from Myapp.delhivery_config import DelhiveryAPI
 
 
 def homepage(request):
@@ -405,29 +404,29 @@ def userpayment_post(request):
         except Exception as e:
             print(f"❌ WhatsApp error: {str(e)}")
 
-        try:
-            delhivery = DelhiveryAPI()
-            waybill = delhivery.generate_waybill()
-            order_data = {
-                "customer_name": name,
-                "phone": phone,
-                "address": address,
-                "order_id": payment_id,
-                "amount": amount,
-                "quantity": quantity,
-                "waybill": waybill[0] if waybill else "",
-                "weight": "0.5",  # Weight in kg
-            }
-            shipment_response = delhivery.create_shipment(order_data)
+        # try:
+        #     delhivery = DelhiveryAPI()
+        #     waybill = delhivery.generate_waybill()
+        #     order_data = {
+        #         "customer_name": name,
+        #         "phone": phone,
+        #         "address": address,
+        #         "order_id": payment_id,
+        #         "amount": amount,
+        #         "quantity": quantity,
+        #         "waybill": waybill[0] if waybill else "",
+        #         "weight": "0.5",  # Weight in kg
+        #     }
+        #     shipment_response = delhivery.create_shipment(order_data)
 
-            if shipment_response:
-                print(f"Shipment created: {shipment_response}")
-            else:
-                print("Shipment creation failed")
+        #     if shipment_response:
+        #         print(f"Shipment created: {shipment_response}")
+        #     else:
+        #         print("Shipment creation failed")
 
 
-        except Exception as e:
-            print(f"❌ Delhivery API error: {str(e)}")
+        # except Exception as e:
+        #     print(f"❌ Delhivery API error: {str(e)}")
 
         # Always return success to user
         return HttpResponse(success_html)
