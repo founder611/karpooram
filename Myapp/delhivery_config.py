@@ -1,14 +1,22 @@
-# delhivery_config.py
 import requests
 import json
-import base64
+
 
 class DelhiveryAPI:
+
     def __init__(self):
 
-        print("Initializing DelhiveryAPI...")
-        self.base_url = "https://track.delhivery.com"  # Production URL
-        self.api_key = "e1699e2152af513b14662e0a587606854ef9e5c6"  # Get from Delhivery dashboard
+        print("=" * 80)
+        print("Initializing Delhivery API")
+
+        # Change to staging if testing
+        # self.base_url = "https://staging-express.delhivery.com"
+
+        # Production
+        self.base_url = "https://track.delhivery.com"
+
+        self.api_key = "f04f6bba55ca9b7346a7959b01da41182c786083"
+
         self.pickup_address = {
             "name": "Ecomonks",
             "address": "Global Avenue Opp SIB Aranattukara Branch Thoppinmoola Poothole",
@@ -18,24 +26,88 @@ class DelhiveryAPI:
             "phone": "7204610007"
         }
 
-        print("DelhiveryAPI initialized with pickup address:", self.pickup_address)
-        
+        print("Base URL :", self.base_url)
+        print("Token    :", self.api_key[:8] + "********")
+        print("=" * 80)
+
+    # -------------------------------------------------------
+    # COMMON HEADERS
+    # -------------------------------------------------------
+
+    def headers(self):
+
+        return {
+            "Authorization": f"Token {self.api_key}",
+            "Content-Type": "application/json"
+        }
+
+    # -------------------------------------------------------
+    # WAYBILL
+    # -------------------------------------------------------
+
+    def generate_waybill(self):
+
+        print("\n" + "=" * 80)
+        print("GENERATING WAYBILL")
+
+        url = f"{self.base_url}/waybill/api/fetch/json/"
+
+        params = {
+            "count": 1
+        }
+
+        print("URL :", url)
+        print("Params :", params)
+
+        try:
+
+            response = requests.get(
+                url,
+                params=params,
+                headers=self.headers(),
+                timeout=30
+            )
+
+            print("Status :", response.status_code)
+            print("Response :", response.text)
+
+            if response.status_code == 200:
+
+                data = response.json()
+
+                print("Waybill JSON :", data)
+
+                return data.get("waybill")
+
+            return None
+
+        except Exception as e:
+
+            print("WAYBILL ERROR")
+            print(e)
+
+            return None
+
+    # -------------------------------------------------------
+    # CREATE SHIPMENT
+    # -------------------------------------------------------
+
     def create_shipment(self, order_data):
-        """Create a shipment in Delhivery"""
-        print("Creating shipment in Delhivery...")
-        # Prepare shipment data
-        shipment_data = {
+
+        print("\n" + "=" * 80)
+        print("CREATE SHIPMENT")
+
+        url = f"{self.base_url}/api/cmu/create.json"
+
+        shipment = {
             "shipment": {
-                "pickup_location": {
-                    "name": self.pickup_address["name"],
-                    "address": self.pickup_address["address"],
-                    "city": self.pickup_address["city"],
-                    "state": self.pickup_address["state"],
-                    "pincode": self.pickup_address["pincode"],
-                    "phone": self.pickup_address["phone"]
-                },
-                "waybill": order_data.get('waybill', ''),
+
+                "pickup_location": self.pickup_address,
+
+                "waybill": order_data.get("waybill", ""),
+
                 "customer_details": {
+
                     "name": order_data["customer_name"],
                     "phone": order_data["phone"],
                     "address": order_data["address"],
@@ -44,131 +116,187 @@ class DelhiveryAPI:
                     "pincode": order_data.get("pincode", ""),
                     "country": "India"
                 },
+
                 "shipment_products": [
+
                     {
                         "name": "Divya Bhimseni Karpooram",
-                        "sku": order_data.get("sku", "KARP-01"),
+                        "sku": "KARP-01",
                         "quantity": 1,
                         "price": str(order_data.get("amount", 0))
                     }
+
                 ],
-                "cod_amount": "0",  # Set to amount if COD
+
+                "cod_amount": "0",
+
                 "order_id": order_data["order_id"],
+
                 "length": "10",
                 "breadth": "10",
                 "height": "10",
                 "weight": order_data.get("weight", "0.5"),
+
                 "invoice_number": order_data.get("invoice_no", ""),
+
                 "client_id": "ECOMONKS"
             }
         }
 
-        print(f"Shipment data: {shipment_data}")
-        
-        # API call
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json"
-        }
-        
+        print("URL")
+        print(url)
+
+        print("\nHeaders")
+        print(self.headers())
+
+        print("\nShipment JSON")
+        print(json.dumps(shipment, indent=4))
+
         try:
 
-            print("Sending API request to create shipment...")
             response = requests.post(
-                f"{self.base_url}/api/cmu/create.json",
-                json=shipment_data,
-                headers=headers,
+                url,
+                json=shipment,
+                headers=self.headers(),
+                timeout=60
+            )
+
+            print("\nHTTP STATUS :", response.status_code)
+
+            print("\nRESPONSE")
+            print(response.text)
+
+            if response.status_code in [200, 201]:
+
+                print("Shipment Created Successfully")
+
+                return response.json()
+
+            else:
+
+                print("Shipment Failed")
+
+                return None
+
+        except Exception as e:
+
+            print("CREATE SHIPMENT ERROR")
+            print(e)
+
+            return None
+
+    # -------------------------------------------------------
+    # PINCODE CHECK
+    # -------------------------------------------------------
+
+    def check_pincode(self, pincode):
+
+        print("\nChecking Pincode")
+
+        url = f"{self.base_url}/c/api/pin-codes/json/"
+
+        params = {
+            "filter_codes": pincode
+        }
+
+        print(url)
+
+        try:
+
+            response = requests.get(
+                url,
+                params=params,
+                headers=self.headers(),
                 timeout=30
             )
-            
-            if response.status_code == 200:
-                return response.json()
-            else:
-                print(f"Delhivery API Error: {response.text}")
-                return None
-                
+
+            print(response.status_code)
+            print(response.text)
+
+            return response.json()
+
         except Exception as e:
-            print(f"Error creating shipment: {str(e)}")
+
+            print(e)
+
             return None
-    
+
+    # -------------------------------------------------------
+    # SHIPPING CHARGES
+    # -------------------------------------------------------
+
     def get_shipping_rates(self, pincode, weight=0.5):
-        """Get shipping rates from Delhivery"""
-        print(f"Getting shipping rates for pincode: {pincode}, weight: {weight}")
-        
-        payload = {
+
+        url = f"{self.base_url}/api/packing/charges"
+
+        params = {
             "pickup_pincode": self.pickup_address["pincode"],
             "delivery_pincode": pincode,
             "weight": weight,
-            "cod": "0"
+            "cod": 0
         }
-        
-        headers = {
-            "Authorization": f"Bearer {self.api_key}"
-        }
-        
-        try:
-            print("Sending API request to get shipping rates...")
-            response = requests.get(
-                f"{self.base_url}/api/packing/charges",
-                params=payload,
-                headers=headers,
-                timeout=30
-            )
-            
-            if response.status_code == 200:
-                return response.json()
-            else:
-                return None
-                
-        except Exception as e:
-            print(f"Error getting rates: {str(e)}")
-            return None
-    
-    def generate_waybill(self):
-        """Generate a waybill number"""
 
-        print("Generating waybill...")
-        headers = {
-            "Authorization": f"Bearer {self.api_key}"
-        }
-        
+        print("\nShipping Charges")
+
+        print(url)
+
         try:
-            print("Sending API request to generate waybill...")
+
             response = requests.get(
-                f"{self.base_url}/api/waybill/generate",
-                params={"count": "1"},
-                headers=headers,
+                url,
+                params=params,
+                headers=self.headers(),
                 timeout=30
             )
-            
-            if response.status_code == 200:
-                return response.json().get('waybill', [])
-            return None
-            
+
+            print(response.status_code)
+            print(response.text)
+
+            return response.json()
+
         except Exception as e:
-            print(f"Error generating waybill: {str(e)}")
+
+            print(e)
+
             return None
-    
+
+    # -------------------------------------------------------
+    # LABEL
+    # -------------------------------------------------------
+
     def print_label(self, waybill):
-        """Generate shipping label"""
-        print(f"Printing label for waybill: {waybill}")
-        headers = {
-            "Authorization": f"Bearer {self.api_key}"
+
+        url = f"{self.base_url}/api/p/packing/slip"
+
+        params = {
+            "wbns": waybill
         }
-        
+
+        print("\nGenerating Label")
+
+        print(url)
+
         try:
-            print("Sending API request to print label...")
+
             response = requests.get(
-                f"{self.base_url}/api/print",
-                params={"waybill": waybill, "format": "pdf"},
-                headers=headers,
+                url,
+                params=params,
+                headers=self.headers(),
                 timeout=30
             )
-            
+
+            print(response.status_code)
+
             if response.status_code == 200:
-                return response.content  # Returns PDF data
+
+                return response.content
+
+            print(response.text)
+
             return None
-            
+
         except Exception as e:
-            print(f"Error generating label: {str(e)}")
+
+            print(e)
+
             return None
