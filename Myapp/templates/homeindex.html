@@ -1877,6 +1877,10 @@
                 <input type="hidden" id="orderQuantity" value="">
                 <input type="hidden" id="orderPackCount" value="1">
                 <input type="hidden" id="orderTotalPrice" value="">
+                <input type="hidden" id="orderCity" value="">
+                <input type="hidden" id="orderDistrict" value="">
+                <input type="hidden" id="orderState" value="">
+                <input type="hidden" id="orderPincode" value="">
 
                 <!-- Order Form -->
                 <div id="orderFormContent">
@@ -2459,6 +2463,10 @@
         var orderState   = document.getElementById('orderState');
         var orderPincode = document.getElementById('orderPincode');
         var orderQuantity = document.getElementById('orderQuantity');
+        var orderCity = document.getElementById('orderCity');
+        var orderDistrict = document.getElementById('orderDistrict');
+        var orderState = document.getElementById('orderState');
+        var orderPincode = document.getElementById('orderPincode');
 
         // Form fields
         var formName     = document.getElementById('formName');
@@ -2518,6 +2526,7 @@
             orderPhone.value = phone;
             orderAddress.value = fullAddress;
             orderCity.value = city;
+            orderDistrict.value = district;
             orderState.value = state;
             orderPincode.value = pincode;
             orderQuantity.value = quantity;
@@ -2623,6 +2632,7 @@
                 phone: orderPhone.value,
                 address: orderAddress.value,
                 city: orderCity.value,
+                district: orderDistrict.value,
                 state: orderState.value,
                 pincode: orderPincode.value,
                 quantity: orderQuantity.value,

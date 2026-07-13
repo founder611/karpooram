@@ -135,10 +135,19 @@ class DelhiveryAPI:
 
         try:
 
+            payload = {
+                "format": "json",
+                "data": json.dumps(shipment)
+            }
+
+            headers = {
+                "Authorization": f"Token {self.api_key}"
+            }
+
             response = requests.post(
                 url,
-                json=shipment,
-                headers=self.headers(),
+                data=payload,
+                headers=headers,
                 timeout=60
             )
 
@@ -147,18 +156,17 @@ class DelhiveryAPI:
             print("\nRESPONSE")
             print(response.text)
 
-            if response.status_code in [200, 201]:
+            result = response.json()
 
+            print(json.dumps(result, indent=4))
+
+            if result.get("success"):
                 print("Shipment Created Successfully")
-
-                return response.json()
-
             else:
+                print("Shipment Creation Failed")
+                print(result)
 
-                print("Shipment Failed")
-
-                return None
-
+            return result
         except Exception as e:
 
             print("CREATE SHIPMENT ERROR")
