@@ -976,10 +976,17 @@ def userpayment_post(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
-        address = request.POST.get('address')
+        address = request.POST.get("address")
+        city = request.POST.get("city")
+        district = request.POST.get("district")
+        state = request.POST.get("state")
+        pincode = request.POST.get("pincode")
         quantity = request.POST.get('quantity')
         payment_id = request.POST.get('payment_id')
         amount = request.POST.get('amount')
+
+
+        full_address = f"{address}, {district}, {city}, {state} - {pincode}"
 
         print("Received payment POST:", {
             'name': name,
@@ -1031,7 +1038,7 @@ def userpayment_post(request):
             <p><b>👤 Name:</b> {name}</p>
             <p><b>📧 Email:</b> {email}</p>
             <p><b>📞 Phone:</b> {phone}</p>
-            <p><b>📍 Address:</b> {address}</p>
+            <p><b>📍 Address:</b> {full_address}</p>
             <p><b>💰 Amount:</b> {amount}</p>
             <p><b>📦 Quantity:</b> {quantity} × {pack_count} pack(s)</p>
             <p><b>💳 Payment ID:</b> {payment_id}</p>
@@ -1048,7 +1055,7 @@ def userpayment_post(request):
             <p><b>Customer:</b> {name}</p>
             <p><b>Email:</b> {email}</p>
             <p><b>Phone:</b> {phone}</p>
-            <p><b>Address:</b> {address}</p>
+            <p><b>Address:</b> {full_address}</p>
             <p><b>Quantity:</b> {quantity} × {pack_count} pack(s)</p>
             <p><b>Amount:</b> {amount}</p>
             <p><b>Payment ID:</b> {payment_id}</p>
@@ -1086,8 +1093,8 @@ def userpayment_post(request):
         
         # 2. Save to Supabase (non-critical)
         try:
-            print(f"Saving order to Supabase: {name}, {email}, {phone}, {address}, {quantity}, {payment_id}, {amount}, {pack_count}")
-            save_order_to_supabase(name, email, phone, address, quantity, payment_id, amount, pack_count)
+            print(f"Saving order to Supabase: {name}, {email}, {phone}, {full_address}, {quantity}, {payment_id}, {amount}, {pack_count}")
+            save_order_to_supabase(name, email, phone, full_address, quantity, payment_id, amount, pack_count)
         except Exception as e:
             print(f"❌ Supabase save error: {str(e)}")
         
@@ -1099,7 +1106,16 @@ def userpayment_post(request):
             print(f"❌ WhatsApp error: {str(e)}")
 
         try:
-            print(f"Creating Delhivery shipment for order: {name}, {phone}, {address}, {quantity}, {payment_id}, {amount}")
+            print(f"Creating Delhivery shipment for order: {name}, {phone}, {full_address}, {quantity}, {payment_id}, {amount}")
+            print("="*70)
+            print("DELIVERY ADDRESS")
+            print("Address :", address)
+            print("District:", district)
+            print("City    :", city)
+            print("State   :", state)
+            print("Pincode :", pincode)
+            print("Supabase Address :", full_address)
+            print("="*70)
             delhivery = DelhiveryAPI()
             waybill = delhivery.generate_waybill()
 
@@ -1107,12 +1123,18 @@ def userpayment_post(request):
             order_data = {
                 "customer_name": name,
                 "phone": phone,
-                "address": address,
+
+                "address": full_address,
+                "district": district,
+                "city": city,
+                "state": state,
+                "pincode": pincode,
+
                 "order_id": payment_id,
                 "amount": amount,
                 "quantity": quantity,
-                "waybill": waybill[0] if waybill else "",
-                "weight": "0.5",  # Weight in kg
+                "waybill": waybill,
+                "weight": "0.5"
             }
             print(f"Order data for Delhivery: {order_data}")
             shipment_response = delhivery.create_shipment(order_data)

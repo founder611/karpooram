@@ -90,10 +90,11 @@ class DelhiveryAPI:
 
                     "name": order_data["customer_name"],
                     "phone": order_data["phone"],
+
                     "address": order_data["address"],
-                    "city": order_data.get("city", ""),
-                    "state": order_data.get("state", ""),
-                    "pincode": order_data.get("pincode", ""),
+                    "city": order_data["city"],
+                    "state": order_data["state"],
+                    "pincode": order_data["pincode"],
                     "country": "India"
                 },
 
