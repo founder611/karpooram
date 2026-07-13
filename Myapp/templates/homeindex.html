@@ -854,6 +854,7 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C8873A' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
         }
+        .form-field select:disabled { cursor: not-allowed; opacity: .55; }
         .btn-submit {
             width: 100%; padding: 14px;
             background: var(--amber); color: var(--brown);
@@ -867,6 +868,112 @@
             margin-top: 6px;
         }
         .btn-submit:hover { background: var(--amber-lt); -webkit-transform: translateY(-2px); transform: translateY(-2px); }
+
+        /* ── PRODUCT PREVIEW IMAGE (shown after pack selection) ── */
+        .product-preview {
+            display: none;
+            -webkit-align-items: center;
+            align-items: center;
+            gap: 14px;
+            background: var(--cream);
+            border: 1px solid rgba(200,135,58,0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            -webkit-animation: fadeUp .3s ease both;
+            animation: fadeUp .3s ease both;
+        }
+        .product-preview.show { display: -webkit-flex; display: flex; }
+        .product-preview img {
+            width: 64px; height: 64px;
+            -webkit-object-fit: cover;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(200,135,58,0.25);
+            -webkit-flex-shrink: 0;
+            flex-shrink: 0;
+        }
+        .product-preview-info { min-width: 0; }
+        .product-preview-info .pp-name { font-size: 0.86rem; font-weight: 600; color: var(--brown); }
+        .product-preview-info .pp-price { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+        /* ── QUANTITY STEPPER ── */
+        .qty-label {
+            display: block;
+            font-size: 0.78rem; font-weight: 500;
+            color: var(--muted); letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .qty-stepper {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            gap: 0;
+            width: -webkit-fit-content;
+            width: fit-content;
+            background: var(--cream);
+            border: 1px solid rgba(200,135,58,0.25);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .qty-btn {
+            width: 40px; height: 42px;
+            background: var(--white);
+            border: none;
+            color: var(--amber);
+            font-size: 1.1rem; font-weight: 600;
+            cursor: pointer;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-transition: background .2s, color .2s;
+            transition: background .2s, color .2s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .qty-btn:hover { background: var(--amber); color: var(--white); }
+        .qty-btn:active { background: var(--amber-lt); }
+        .qty-value {
+            min-width: 48px; text-align: center;
+            font-size: 0.95rem; font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ── PRICE DISPLAY ── */
+        .price-display {
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--brown) 0%, var(--brown-md) 100%);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+        }
+        .price-display .price-label {
+            font-size: 0.78rem; font-weight: 500;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+        }
+        .price-display .price-amount {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem; font-weight: 600;
+            color: var(--amber-lt);
+        }
+        .price-display .price-amount .price-sub {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72rem; font-weight: 400;
+            color: rgba(255,255,255,0.55);
+            display: block;
+            text-align: right;
+            margin-top: 2px;
+        }
 
         /* ════════════════════════════════════════
            OTP MODAL STYLES
@@ -1764,7 +1871,12 @@
                 <input type="hidden" id="orderEmail" value="">
                 <input type="hidden" id="orderPhone" value="">
                 <input type="hidden" id="orderAddress" value="">
+                <input type="hidden" id="orderCity" value="">
+                <input type="hidden" id="orderState" value="">
+                <input type="hidden" id="orderPincode" value="">
                 <input type="hidden" id="orderQuantity" value="">
+                <input type="hidden" id="orderPackCount" value="1">
+                <input type="hidden" id="orderTotalPrice" value="">
 
                 <!-- Order Form -->
                 <div id="orderFormContent">
@@ -1778,7 +1890,23 @@
                         <input type="tel" id="formPhone" placeholder="Contact Number" required>
                     </div>
                     <div class="form-field">
-                        <input type="text" id="formAddress" placeholder="Delivery Address" required>
+                        <select id="formState" required>
+                            <option value="" disabled selected>Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <select id="formDistrict" required disabled>
+                            <option value="" disabled selected>Select District</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="formHouseNo" placeholder="House No / Street / Locality" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="formCity" placeholder="City / Town" required>
+                    </div>
+                    <div class="form-field">
+                        <input type="text" id="formPincode" placeholder="Pincode" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required>
                     </div>
                     <div class="form-field">
                         <select id="formQuantity" required>
@@ -1787,6 +1915,30 @@
                             <option value="175g">175g Pack</option>
                         </select>
                     </div>
+
+                    <!-- Product image preview: swaps automatically based on pack selected above -->
+                    <div class="product-preview" id="productPreview">
+                        <img id="productPreviewImg" src="" alt="Selected karpooram pack">
+                        <div class="product-preview-info">
+                            <div class="pp-name" id="productPreviewName"></div>
+                            <div class="pp-price" id="productPreviewPrice"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <span class="qty-label">Number of Packs</span>
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                            <span class="qty-value" id="qtyValue">1</span>
+                            <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+
+                    <div class="price-display">
+                        <span class="price-label">Total</span>
+                        <span class="price-amount" id="priceAmount">₹0</span>
+                    </div>
+
                     <button type="button" class="btn-submit" id="sendOtpBtn">
                         <i class="fa fa-envelope" style="margin-right:8px;"></i> Continue &amp; Verify Email
                     </button>
@@ -2100,6 +2252,191 @@
     })();
 
     /* ════════════════════════════════════════
+       INDIAN STATES & DISTRICTS — CASCADING DROPDOWNS
+    ════════════════════════════════════════ */
+    (function(){
+        var STATE_DISTRICTS = {
+            "Andhra Pradesh": ["Anantapur","Chittoor","East Godavari","Guntur","Krishna","Kurnool","Nellore","Prakasam","Srikakulam","Visakhapatnam","Vizianagaram","West Godavari","YSR Kadapa"],
+            "Arunachal Pradesh": ["Papum Pare","East Siang","West Siang","Lower Subansiri","Upper Subansiri","Tawang","West Kameng","East Kameng","Changlang","Tirap","Lohit","Namsai"],
+            "Assam": ["Kamrup","Kamrup Metropolitan","Dibrugarh","Jorhat","Sivasagar","Cachar","Nagaon","Barpeta","Golaghat","Tinsukia","Sonitpur","Dhemaji"],
+            "Bihar": ["Patna","Gaya","Bhagalpur","Muzaffarpur","Darbhanga","Purnia","Nalanda","Saharsa","Begusarai","Vaishali","Rohtas","Siwan"],
+            "Chhattisgarh": ["Raipur","Bilaspur","Durg","Korba","Rajnandgaon","Raigarh","Jagdalpur (Bastar)","Ambikapur","Kanker","Mahasamund"],
+            "Goa": ["North Goa","South Goa"],
+            "Gujarat": ["Ahmedabad","Surat","Vadodara","Rajkot","Bhavnagar","Jamnagar","Junagadh","Gandhinagar","Anand","Kutch","Mehsana","Navsari"],
+            "Haryana": ["Faridabad","Gurugram","Panipat","Ambala","Karnal","Hisar","Rohtak","Sonipat","Yamunanagar","Panchkula","Kurukshetra","Sirsa"],
+            "Himachal Pradesh": ["Shimla","Kangra","Mandi","Solan","Kullu","Una","Hamirpur","Chamba","Sirmaur","Bilaspur"],
+            "Jharkhand": ["Ranchi","Jamshedpur (East Singhbhum)","Dhanbad","Bokaro","Hazaribagh","Giridih","Deoghar","Dumka","Palamu","Ramgarh"],
+            "Karnataka": ["Bengaluru Urban","Bengaluru Rural","Mysuru","Mangaluru (Dakshina Kannada)","Hubballi-Dharwad","Belagavi","Kalaburagi","Ballari","Shivamogga","Tumakuru","Udupi","Davanagere"],
+            "Kerala": ["Thiruvananthapuram","Kollam","Pathanamthitta","Alappuzha","Kottayam","Idukki","Ernakulam","Thrissur","Palakkad","Malappuram","Kozhikode","Wayanad","Kannur","Kasaragod"],
+            "Madhya Pradesh": ["Bhopal","Indore","Jabalpur","Gwalior","Ujjain","Sagar","Rewa","Satna","Ratlam","Dewas","Chhindwara","Vidisha"],
+            "Maharashtra": ["Mumbai City","Mumbai Suburban","Pune","Nagpur","Nashik","Thane","Aurangabad (Chhatrapati Sambhajinagar)","Solapur","Kolhapur","Amravati","Nanded","Satara"],
+            "Manipur": ["Imphal East","Imphal West","Thoubal","Bishnupur","Churachandpur","Senapati","Ukhrul","Tamenglong"],
+            "Meghalaya": ["East Khasi Hills","West Khasi Hills","Jaintia Hills","Ri Bhoi","East Garo Hills","West Garo Hills"],
+            "Mizoram": ["Aizawl","Lunglei","Champhai","Kolasib","Serchhip","Mamit","Lawngtlai"],
+            "Nagaland": ["Kohima","Dimapur","Mokokchung","Tuensang","Wokha","Zunheboto","Mon","Phek"],
+            "Odisha": ["Khordha (Bhubaneswar)","Cuttack","Puri","Ganjam","Sambalpur","Balasore","Mayurbhanj","Rourkela (Sundargarh)","Kalahandi","Koraput"],
+            "Punjab": ["Ludhiana","Amritsar","Jalandhar","Patiala","Bathinda","Mohali","Hoshiarpur","Ferozepur","Moga","Sangrur"],
+            "Rajasthan": ["Jaipur","Jodhpur","Udaipur","Kota","Bikaner","Ajmer","Alwar","Bharatpur","Sikar","Bhilwara","Pali","Sri Ganganagar"],
+            "Sikkim": ["East Sikkim","West Sikkim","North Sikkim","South Sikkim"],
+            "Tamil Nadu": ["Chennai","Coimbatore","Madurai","Tiruchirappalli","Salem","Tirunelveli","Erode","Vellore","Thanjavur","Dindigul","Kanyakumari","Thoothukudi"],
+            "Telangana": ["Hyderabad","Rangareddy","Warangal","Nizamabad","Karimnagar","Khammam","Nalgonda","Mahbubnagar","Medak","Adilabad"],
+            "Tripura": ["West Tripura","Sepahijala","Gomati","South Tripura","Dhalai","Unakoti","North Tripura"],
+            "Uttar Pradesh": ["Lucknow","Kanpur Nagar","Ghaziabad","Agra","Varanasi","Meerut","Prayagraj","Bareilly","Aligarh","Moradabad","Noida (Gautam Buddh Nagar)","Gorakhpur"],
+            "Uttarakhand": ["Dehradun","Haridwar","Nainital","Udham Singh Nagar","Pauri Garhwal","Almora","Tehri Garhwal","Chamoli"],
+            "West Bengal": ["Kolkata","Howrah","North 24 Parganas","South 24 Parganas","Hooghly","Nadia","Purba Bardhaman","Paschim Bardhaman","Darjeeling","Malda","Murshidabad","Purba Medinipur"],
+            "Andaman and Nicobar Islands": ["Nicobar","North and Middle Andaman","South Andaman"],
+            "Chandigarh": ["Chandigarh"],
+            "Dadra and Nagar Haveli and Daman and Diu": ["Dadra and Nagar Haveli","Daman","Diu"],
+            "Delhi": ["New Delhi","North Delhi","South Delhi","East Delhi","West Delhi","Central Delhi","North East Delhi","North West Delhi","South East Delhi","South West Delhi","Shahdara"],
+            "Jammu and Kashmir": ["Srinagar","Jammu","Baramulla","Anantnag","Budgam","Kupwara","Pulwama","Udhampur"],
+            "Ladakh": ["Leh","Kargil"],
+            "Lakshadweep": ["Lakshadweep"],
+            "Puducherry": ["Puducherry","Karaikal","Mahe","Yanam"]
+        };
+
+        var stateSel    = document.getElementById('formState');
+        var districtSel = document.getElementById('formDistrict');
+
+        // Populate states (alphabetical, keeping Kerala visible naturally within order)
+        Object.keys(STATE_DISTRICTS).sort().forEach(function(state){
+            var opt = document.createElement('option');
+            opt.value = state;
+            opt.textContent = state;
+            stateSel.appendChild(opt);
+        });
+
+        function populateDistricts(state) {
+            districtSel.innerHTML = '<option value="" disabled selected>Select District</option>';
+            var districts = STATE_DISTRICTS[state] || [];
+            districts.forEach(function(d){
+                var opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                districtSel.appendChild(opt);
+            });
+            districtSel.disabled = districts.length === 0;
+        }
+
+        stateSel.addEventListener('change', function(){
+            populateDistricts(this.value);
+        });
+
+        var pincodeInput = document.getElementById('formPincode');
+        pincodeInput.addEventListener('input', function(){
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+        });
+    })();
+
+    /* ════════════════════════════════════════
+       PRODUCT IMAGE SWAP + QTY STEPPER + AUTO PRICE
+       (custom site — not Shopify, so this is all
+       plain JS. Edit PRODUCT_DATA below to change
+       images / prices / bundle tiers.)
+    ════════════════════════════════════════ */
+    (function(){
+        // NOTE: swap these image paths for your real files.
+        // 50g uses the path you gave me. I've guessed a matching
+        // filename for 175g (karpooram175.png) — rename it on
+        // disk to match, or tell me the real filename and I'll update it.
+        var PRODUCT_DATA = {
+            '50g': {
+                label: '50g Pack',
+                image: "{% static 'homepage/img/karpooram50.png' %}",
+                // qty : price (₹) — from your bundle sheet
+                tiers: { 1: 1, 2: 349, 4: 649 }
+            },
+            '175g': {
+                label: '175g Pack',
+                image: "{% static 'homepage/img/karpooram175.png' %}",
+                tiers: { 1: 549, 2: 999, 4: 1899 }
+            }
+        };
+
+        var formQuantitySel = document.getElementById('formQuantity');
+        var productPreview  = document.getElementById('productPreview');
+        var previewImg      = document.getElementById('productPreviewImg');
+        var previewName     = document.getElementById('productPreviewName');
+        var previewPrice    = document.getElementById('productPreviewPrice');
+        var qtyMinusBtn     = document.getElementById('qtyMinus');
+        var qtyPlusBtn      = document.getElementById('qtyPlus');
+        var qtyValueEl      = document.getElementById('qtyValue');
+        var priceAmountEl   = document.getElementById('priceAmount');
+        var orderPackCount  = document.getElementById('orderPackCount');
+        var orderTotalPrice = document.getElementById('orderTotalPrice');
+
+        var packCount = 1;
+
+        // Price for N packs of a given size, using the nearest
+        // bundle tier below/at N, then per-unit rate for any extra.
+        function priceFor(packKey, qty) {
+            var data = PRODUCT_DATA[packKey];
+            if (!data) return 0;
+            var tiers = data.tiers;
+            if (tiers[qty] !== undefined) return tiers[qty];
+
+            var tierQtys = Object.keys(tiers).map(Number).sort(function(a,b){ return a-b; });
+            var highest = tierQtys[tierQtys.length - 1];
+
+            if (qty > highest) {
+                var perUnit = tiers[highest] / highest;
+                return Math.round(perUnit * qty);
+            }
+            // qty falls between two defined tiers (e.g. 3 between 2 and 4):
+            // use the lower tier's per-unit rate for the extra packs.
+            var lowerQty = tierQtys[0];
+            for (var i = 0; i < tierQtys.length; i++) {
+                if (tierQtys[i] <= qty) lowerQty = tierQtys[i];
+            }
+            var basePerUnit = tiers[lowerQty] / lowerQty;
+            return Math.round(basePerUnit * qty);
+        }
+
+        function updateAll() {
+            var packKey = formQuantitySel.value;
+
+            if (!packKey) {
+                productPreview.classList.remove('show');
+                priceAmountEl.textContent = '₹0';
+                orderTotalPrice.value = '';
+                orderPackCount.value = packCount;
+                return;
+            }
+
+            var data = PRODUCT_DATA[packKey];
+
+            // Show matching product image
+            previewImg.src = data.image;
+            previewImg.alt = data.label + ' – Ecomonks Divya Bhimseni Karpooram';
+            previewName.textContent = data.label;
+            productPreview.classList.add('show');
+
+            // Auto-calculate price
+            var total = priceFor(packKey, packCount);
+            priceAmountEl.textContent = '₹' + total.toLocaleString('en-IN');
+            previewPrice.textContent = packCount + ' × ' + data.label + ' = ₹' + total.toLocaleString('en-IN');
+
+            orderTotalPrice.value = total;
+            orderPackCount.value = packCount;
+        }
+
+        formQuantitySel.addEventListener('change', updateAll);
+
+        qtyMinusBtn.addEventListener('click', function(){
+            if (packCount > 1) packCount--;
+            qtyValueEl.textContent = packCount;
+            updateAll();
+        });
+        qtyPlusBtn.addEventListener('click', function(){
+            if (packCount < 20) packCount++;
+            qtyValueEl.textContent = packCount;
+            updateAll();
+        });
+
+        // Initialize on load in case a value is prefilled
+        updateAll();
+    })();
+
+    /* ════════════════════════════════════════
        OTP VERIFICATION — COMPLETE
     ════════════════════════════════════════ */
     (function(){
@@ -2118,13 +2455,20 @@
         var orderEmail   = document.getElementById('orderEmail');
         var orderPhone   = document.getElementById('orderPhone');
         var orderAddress = document.getElementById('orderAddress');
+        var orderCity    = document.getElementById('orderCity');
+        var orderState   = document.getElementById('orderState');
+        var orderPincode = document.getElementById('orderPincode');
         var orderQuantity = document.getElementById('orderQuantity');
 
         // Form fields
         var formName     = document.getElementById('formName');
         var formEmail    = document.getElementById('formEmail');
         var formPhone    = document.getElementById('formPhone');
-        var formAddress  = document.getElementById('formAddress');
+        var formState    = document.getElementById('formState');
+        var formDistrict = document.getElementById('formDistrict');
+        var formHouseNo  = document.getElementById('formHouseNo');
+        var formCity     = document.getElementById('formCity');
+        var formPincode  = document.getElementById('formPincode');
         var formQuantity = document.getElementById('formQuantity');
 
         var otpTimer     = null;
@@ -2148,19 +2492,34 @@
             var name = formName.value.trim();
             var email = formEmail.value.trim();
             var phone = formPhone.value.trim();
-            var address = formAddress.value.trim();
+            var state = formState.value;
+            var district = formDistrict.value;
+            var houseNo = formHouseNo.value.trim();
+            var city = formCity.value.trim();
+            var pincode = formPincode.value.trim();
             var quantity = formQuantity.value;
 
-            if (!name || !email || !phone || !address || !quantity) {
+            if (!name || !email || !phone || !state || !district || !houseNo || !city || !pincode || !quantity) {
                 alert('Please fill all fields');
                 return;
             }
+
+            if (!/^[0-9]{6}$/.test(pincode)) {
+                alert('Please enter a valid 6-digit pincode');
+                return;
+            }
+
+            // Combine house/street + city + district + state + pincode into a single address string
+            var fullAddress = houseNo + ', ' + city + ', ' + district + ', ' + state + ' - ' + pincode;
 
             // Store order data
             orderName.value = name;
             orderEmail.value = email;
             orderPhone.value = phone;
-            orderAddress.value = address;
+            orderAddress.value = fullAddress;
+            orderCity.value = city;
+            orderState.value = state;
+            orderPincode.value = pincode;
             orderQuantity.value = quantity;
 
             // Show OTP modal
@@ -2263,7 +2622,12 @@
                 email: orderEmail.value,
                 phone: orderPhone.value,
                 address: orderAddress.value,
-                quantity: orderQuantity.value
+                city: orderCity.value,
+                state: orderState.value,
+                pincode: orderPincode.value,
+                quantity: orderQuantity.value,
+                pack_count: document.getElementById('orderPackCount').value,
+                total_price: document.getElementById('orderTotalPrice').value
             };
 
             for (var key in fields) {

@@ -47,46 +47,26 @@ class DelhiveryAPI:
 
     def generate_waybill(self):
 
-        print("\n" + "=" * 80)
-        print("GENERATING WAYBILL")
-
         url = f"{self.base_url}/waybill/api/fetch/json/"
 
-        params = {
-            "count": 1
-        }
+        response = requests.get(
+            url,
+            params={"count": 1},
+            headers=self.headers()
+        )
 
-        print("URL :", url)
-        print("Params :", params)
+        print(response.status_code)
+        print(response.text)
 
-        try:
+        if response.status_code == 200:
 
-            response = requests.get(
-                url,
-                params=params,
-                headers=self.headers(),
-                timeout=30
-            )
+            waybill = response.json()
 
-            print("Status :", response.status_code)
-            print("Response :", response.text)
+            print("Waybill:", waybill)
 
-            if response.status_code == 200:
+            return waybill
 
-                data = response.json()
-
-                print("Waybill JSON :", data)
-
-                return data.get("waybill")
-
-            return None
-
-        except Exception as e:
-
-            print("WAYBILL ERROR")
-            print(e)
-
-            return None
+        return None
 
     # -------------------------------------------------------
     # CREATE SHIPMENT

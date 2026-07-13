@@ -640,8 +640,8 @@ from Myapp.delhivery_config import DelhiveryAPI
 
 
 def homepage(request):
-    return render(request, 'newhome.html')
-    # return render(request, 'homeindex.html')
+    # return render(request, 'newhome.html')
+    return render(request, 'homeindex.html')
 
 
 
@@ -970,6 +970,7 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
 # ==========================================
 # USER PAYMENT POST - MAIN FUNCTION
 # ==========================================
+
 def userpayment_post(request):
     if request.method == "POST":
         name = request.POST.get('name')
