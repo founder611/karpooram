@@ -698,6 +698,10 @@ def order_post(request):
     phone = request.POST['phone']
     address = request.POST['address']
     quantity = request.POST['quantity']
+    city = request.POST.get('city', '')
+    district = request.POST.get('district', '')
+    state = request.POST.get('state', '')
+    pincode = request.POST.get('pincode', '')
 
     try:
         pack_count = int(request.POST.get('pack_count', 1))
@@ -715,6 +719,10 @@ def order_post(request):
         'phone': phone,
         'address': address,
         'quantity': quantity,
+        'city': city,
+        'district': district,
+        'state': state,
+        'pincode': pincode,
         'pack_count': pack_count,
         'price_rupees': price_rupees,
         'amount': amount,
