@@ -969,6 +969,15 @@ def send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=
 #         return False
 
 
+def get_weight(quantity, pack_count):
+    if quantity == "50g":
+        return round(0.05 * pack_count, 3)
+
+    if quantity == "175g":
+        return round(0.175 * pack_count, 3)
+
+    return 0.5
+
 # ==========================================
 # USER PAYMENT POST - MAIN FUNCTION
 # ==========================================
@@ -1126,7 +1135,7 @@ def userpayment_post(request):
                 "customer_name": name,
                 "phone": phone,
 
-                "address": full_address,
+                "address": address,
                 "district": district,
                 "city": city,
                 "state": state,
@@ -1136,7 +1145,7 @@ def userpayment_post(request):
                 "amount": amount,
                 "quantity": quantity,
                 "waybill": waybill,
-                "weight": "0.5"
+                "weight": get_weight(quantity, pack_count)
             }
             print(f"Order data for Delhivery: {order_data}")
             shipment_response = delhivery.create_shipment(order_data)

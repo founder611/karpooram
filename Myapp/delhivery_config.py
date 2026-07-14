@@ -1,5 +1,6 @@
 import requests
 import json
+from datetime import datetime
 
 
 class DelhiveryAPI:
@@ -74,105 +75,83 @@ class DelhiveryAPI:
 
     def create_shipment(self, order_data):
 
-        print("\n" + "=" * 80)
-        print("CREATE SHIPMENT")
-
         url = f"{self.base_url}/api/cmu/create.json"
 
         shipment = {
-            "shipment": {
+            "name": order_data["customer_name"],
+            "add": order_data["address"],
 
-                "pickup_location": self.pickup_address,
+            "pin": order_data["pincode"],
+            "city": order_data["city"],
+            "state": order_data["state"],
+            "country": "India",
 
-                "waybill": order_data.get("waybill", ""),
+            "phone": order_data["phone"],
 
-                "customer_details": {
+            "order": order_data["order_id"],
 
-                    "name": order_data["customer_name"],
-                    "phone": order_data["phone"],
+            "payment_mode": "Prepaid",
 
-                    "address": order_data["address"],
-                    "city": order_data["city"],
-                    "state": order_data["state"],
-                    "pincode": order_data["pincode"],
-                    "country": "India"
-                },
+            "return_pin": self.pickup_address["pincode"],
+            "return_city": self.pickup_address["city"],
+            "return_phone": self.pickup_address["phone"],
+            "return_add": self.pickup_address["address"],
+            "return_state": self.pickup_address["state"],
+            "return_country": "India",
 
-                "shipment_products": [
+            "products_desc": "Divya Bhimseni Karpooram",
+            "hsn_code": "",
 
-                    {
-                        "name": "Divya Bhimseni Karpooram",
-                        "sku": "KARP-01",
-                        "quantity": 1,
-                        "price": str(order_data.get("amount", 0))
-                    }
+            "cod_amount": "0",
 
-                ],
+            "order_date": datetime.now().strftime("%Y-%m-%d"),
 
-                "cod_amount": "0",
+            "total_amount": str(order_data["amount"]),
 
-                "order_id": order_data["order_id"],
+            "seller_add": self.pickup_address["address"],
+            "seller_name": self.pickup_address["name"],
+            "seller_inv": "",
 
-                "length": "10",
-                "breadth": "10",
-                "height": "10",
-                "weight": order_data.get("weight", "0.5"),
+            "quantity": "1",
 
-                "invoice_number": order_data.get("invoice_no", ""),
+            "waybill": order_data["waybill"],
 
-                "client_id": "ECOMONKS"
-            }
+            "shipment_width": "10",
+            "shipment_height": "10",
+
+            "weight": str(order_data["weight"]),
+
+            "shipping_mode": "Surface",
+
+            "address_type": "home"
         }
 
-        print("URL")
-        print(url)
+        payload = {
+            "format": "json",
+            "data": json.dumps({
+                "shipments": [shipment],
+                "pickup_location": {
+                    "name": self.pickup_address["name"]
+                }
+            })
+        }
 
-        print("\nHeaders")
-        print(self.headers())
+        headers = {
+            "Authorization": f"Token {self.api_key}",
+            "Accept": "application/json"
+        }
 
-        print("\nShipment JSON")
-        print(json.dumps(shipment, indent=4))
+        response = requests.post(
+            url,
+            data=payload,
+            headers=headers,
+            timeout=60
+        )
 
-        try:
+        print(response.status_code)
+        print(response.text)
 
-            payload = {
-                "format": "json",
-                "data": json.dumps(shipment)
-            }
-
-            headers = {
-                "Authorization": f"Token {self.api_key}"
-            }
-
-            response = requests.post(
-                url,
-                data=payload,
-                headers=headers,
-                timeout=60
-            )
-
-            print("\nHTTP STATUS :", response.status_code)
-
-            print("\nRESPONSE")
-            print(response.text)
-
-            result = response.json()
-
-            print(json.dumps(result, indent=4))
-
-            if result.get("success"):
-                print("Shipment Created Successfully")
-            else:
-                print("Shipment Creation Failed")
-                print(result)
-
-            return result
-        except Exception as e:
-
-            print("CREATE SHIPMENT ERROR")
-            print(e)
-
-            return None
+        return response.json()
 
     # -------------------------------------------------------
     # PINCODE CHECK
