@@ -641,7 +641,8 @@ from Myapp.delhivery_config import DelhiveryAPI
 
 def homepage(request):
     # return render(request, 'newhome.html')
-    return render(request, 'homeindex.html')
+    # return render(request, 'homeindex.html')
+    return render(request, 'updatehome.html')
 
 
 
