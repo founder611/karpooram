@@ -652,17 +652,15 @@ def blog_page(request):
 
 
 PRICING_TIERS = {
-    "50g":  {1: 1, 2: 349, 4: 649},
+    "50g":  {1: 199, 2: 349, 4: 649},
     "175g": {1: 549, 2: 999, 4: 1899},
 }
 
+FREE_SHIPPING_THRESHOLD = 999   # ₹ — must match the JS
+SHIPPING_CHARGE = 49            # ₹ — must match the JS
+
 
 def calculate_price(quantity, pack_count):
-    """
-    Server-side authoritative price calculation.
-    Mirrors the priceFor() logic in karpooram.html's JS
-    so the displayed price and the charged price always match.
-    """
     tiers = PRICING_TIERS.get(quantity)
     if not tiers:
         return 0
@@ -677,7 +675,6 @@ def calculate_price(quantity, pack_count):
         per_unit = tiers[highest] / highest
         return round(per_unit * pack_count)
 
-    # pack_count falls between two defined tiers (e.g. 3, between 2 and 4)
     lower_qty = tier_qtys[0]
     for tq in tier_qtys:
         if tq <= pack_count:
@@ -686,8 +683,11 @@ def calculate_price(quantity, pack_count):
     return round(per_unit * pack_count)
 
 
-def order_post(request):
+def calculate_shipping(subtotal):
+    return 0 if subtotal >= FREE_SHIPPING_THRESHOLD else SHIPPING_CHARGE
 
+
+def order_post(request):
     name = request.POST['name']
     email = request.POST['email']
     phone = request.POST['phone']
@@ -705,8 +705,11 @@ def order_post(request):
     if pack_count < 1:
         pack_count = 1
 
-    price_rupees = calculate_price(quantity, pack_count)
-    amount = int(round(price_rupees * 100))  # paise, for Razorpay
+    subtotal_rupees = calculate_price(quantity, pack_count)
+    shipping_rupees = calculate_shipping(subtotal_rupees)
+    total_rupees = subtotal_rupees + shipping_rupees
+
+    amount = int(round(total_rupees * 100))  # paise, for Razorpay
 
     return render(request, 'pp.html', {
         'name': name,
@@ -719,7 +722,9 @@ def order_post(request):
         'state': state,
         'pincode': pincode,
         'pack_count': pack_count,
-        'price_rupees': price_rupees,
+        'subtotal_rupees': subtotal_rupees,
+        'shipping_rupees': shipping_rupees,
+        'price_rupees': total_rupees,   # keep same key your template expects
         'amount': amount,
         'razorpay_api_key': 'rzp_live_Su35EVyNYFeKCF',
         'currency': 'INR'
