@@ -649,13 +649,7 @@ def blog_page(request):
     return render(request,'blog.html')
 
 
-# ==========================================
-# PRICING TABLE — keep this in sync with the
-# PRODUCT_DATA object in karpooram.html.
-# Prices are the AUTHORITATIVE source of truth
-# on the server; we never trust a price sent
-# from the browser (a user could tamper with it).
-# ==========================================
+
 PRICING_TIERS = {
     "50g":  {1: 1, 2: 349, 4: 649},
     "175g": {1: 549, 2: 999, 4: 1899},

@@ -18,7 +18,7 @@ class DelhiveryAPI:
         self.api_key = "f04f6bba55ca9b7346a7959b01da41182c786083"
 
         self.pickup_address = {
-            "name": "Ecomonks",
+            "name": "yathisha",
             "address": "Global Avenue Opp SIB Aranattukara Branch Thoppinmoola Poothole",
             "city": "Thrissur",
             "state": "Kerala",
