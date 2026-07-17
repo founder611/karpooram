@@ -331,12 +331,12 @@
         <span class="brand-name">Ecomonks</span>
     </a>
     <ul class="nav-links">
-        <li><a href="/karpooram/">Home</a></li>
-        <li><a href="/karpooram/#about">About</a></li>
-        <li><a href="/karpooram/#gallery">Gallery</a></li>
-        <li><a href="/blog/" class="active">Blog</a></li>
-        <li><a href="/karpooram/#testimonials">Reviews</a></li>
-        <li><a href="/karpooram/#footer">Contact</a></li>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'home' %}#about">About</a>
+        <a href="{% url 'home' %}#gallery">Gallery</a>
+        <a href="{% url 'blog' %}">Blog</a>
+        <a href="{% url 'home' %}#testimonials">Reviews</a>
+        <a href="{% url 'home' %}#footer">Contact</a>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -344,13 +344,13 @@
 </nav>
 
 <div class="mobile-nav" id="mobileNav">
-    <a href="/karpooram/">Home</a>
-    <a href="/karpooram/#about">About</a>
-    <a href="/karpooram/#gallery">Gallery</a>
-    <a href="/blog/">Blog</a>
-    <a href="/karpooram/#testimonials">Testimonials</a>
-    <a href="/karpooram/#order">Order</a>
-    <a href="/karpooram/#footer">Contact</a>
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'home' %}#about">About</a>
+    <a href="{% url 'home' %}#gallery">Gallery</a>
+    <a href="{% url 'blog' %}">Blog</a>
+    <a href="{% url 'home' %}#testimonials">Testimonials</a>
+    <a href="{% url 'home' %}#order">Order</a>
+    <a href="{% url 'home' %}#footer">Contact</a>
 </div>
 
 <section class="hero">
