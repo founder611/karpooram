@@ -1015,12 +1015,17 @@ def userpayment_post(request):
             'amount': amount
         })
 
+        
+
         try:
             pack_count = int(request.POST.get('pack_count', 1))
         except (TypeError, ValueError):
             pack_count = 1
-        if pack_count < 1:
+        if pack_count < 1:  
             pack_count = 1
+
+        print("POST pack_count =", request.POST.get("pack_count"))
+        print("PACK COUNT =", pack_count)
 
         try:
             amount = float(amount) / 100   # Paisa → Rupees
@@ -1132,6 +1137,7 @@ def userpayment_post(request):
             print("State   :", state)
             print("Pincode :", pincode)
             print("Supabase Address :", full_address)
+            print(f"Pack Count: {pack_count}, Quantity: {quantity}, Amount: {amount}")
             print("="*70)
             delhivery = DelhiveryAPI()
             waybill = delhivery.generate_waybill()
@@ -1151,7 +1157,9 @@ def userpayment_post(request):
                 "amount": amount,
                 "quantity": quantity,
                 "waybill": waybill,
-                "weight": get_weight(quantity, pack_count)
+                "weight": get_weight(quantity, pack_count),
+                "pack_count": pack_count,
+
             }
             print(f"Order data for Delhivery: {order_data}")
             shipment_response = delhivery.create_shipment(order_data)
