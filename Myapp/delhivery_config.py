@@ -99,7 +99,7 @@ class DelhiveryAPI:
             "return_state": self.pickup_address["state"],
             "return_country": "India",
 
-            "products_desc": f"Divya Bhimseni Karpooram ({order_data['pack_count']} Packs)",
+            "products_desc": f"Divya Bhimseni Karpooram ({order_data['pack_count']} Packs of {order_data['weight']}g)",
             "hsn_code": "",
 
             "cod_amount": "0",
@@ -112,7 +112,7 @@ class DelhiveryAPI:
             "seller_name": self.pickup_address["name"],
             "seller_inv": "",
 
-            "quantity": str(order_data["pack_count"]),
+            "quantity": str(order_data["weight"]),
 
             "waybill": order_data["waybill"],
 

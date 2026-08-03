@@ -757,7 +757,7 @@ def raz_pay(request, amount):
 # ==========================================
 # SAVE ORDER TO SUPABASE - FIXED VERSION
 # ==========================================
-def save_order_to_supabase(name, email, phone, address, quantity, payment_id, amount, pack_count=1):
+def save_order_to_supabase(name, email, phone, address, quantity, payment_id, amount, pack_count):
     """Save order to Supabase database"""
     try:
         # Your Supabase credentials - DIRECT values
@@ -1001,6 +1001,8 @@ def userpayment_post(request):
         quantity = request.POST.get('quantity')
         payment_id = request.POST.get('payment_id')
         amount = request.POST.get('amount')
+        packcount = request.POST.get('pack_count')
+
 
 
         full_address = f"{address}, {district}, {city}, {state} - {pincode}"
@@ -1012,13 +1014,14 @@ def userpayment_post(request):
             'address': address,
             'quantity': quantity,
             'payment_id': payment_id,
-            'amount': amount
+            'amount': amount,
+            'pack_count': packcount
         })
 
         
 
         try:
-            pack_count = int(request.POST.get('pack_count', 1))
+            pack_count = int(packcount)
         except (TypeError, ValueError):
             pack_count = 1
         if pack_count < 1:  
@@ -1123,7 +1126,7 @@ def userpayment_post(request):
         # 3. Send WhatsApp (non-critical)
         try:
             print(f"Sending WhatsApp message: {name}, {phone}, {quantity}, {payment_id}, {amount}")
-            send_whatsapp_message(name, phone, quantity, payment_id, amount,order_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            send_whatsapp_message(name, phone, quantity, payment_id, amount, order_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         except Exception as e:
             print(f"❌ WhatsApp error: {str(e)}")
 
