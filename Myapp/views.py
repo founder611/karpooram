@@ -1204,7 +1204,7 @@ def emailenquiry(request):
             
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login("founder@ecomonks.in", "crmwddzdzoqatofz")
+            server.login("founder@ecomonks.in", "xsxfgeububphfszr")
             
             subscriber_msg = MIMEMultipart()
             subscriber_msg['From'] = "founder@ecomonks.in"
@@ -1290,7 +1290,7 @@ def send_email_otp(email, otp):
         
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login("founder@ecomonks.in", "crmwddzdzoqatofz")
+        server.login("founder@ecomonks.in", "xsxfgeububphfszr")
         server.sendmail("founder@ecomonks.in", email, msg.as_string())
         server.quit()
         
