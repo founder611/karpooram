@@ -634,6 +634,8 @@ from django.http import HttpResponse
 from datetime import datetime
 import requests
 
+from django.conf import settings
+
 # Import Supabase
 from supabase import create_client
 from Myapp.delhivery_config import DelhiveryAPI
@@ -1090,25 +1092,25 @@ def userpayment_post(request):
             
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login(os.environ.get("EMAIL_HOST_USER"), os.environ.get("EMAIL_HOST_PASSWORD"))
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
 
             # server.login("founder@ecomonks.in", "crmwddzdzoqatofz")
             
             # Customer email
             customer_msg = MIMEMultipart()
-            customer_msg['From'] = os.environ.get("EMAIL_HOST_USER")
+            customer_msg['From'] = settings.EMAIL_HOST_USER
             customer_msg['To'] = email
             customer_msg['Subject'] = "ECOMONKS Order Confirmation"
             customer_msg.attach(MIMEText(customer_html, 'html', 'utf-8'))
-            server.sendmail(os.environ.get("EMAIL_HOST_USER"), email, customer_msg.as_string())
+            server.sendmail(settings.EMAIL_HOST_USER, email, customer_msg.as_string())
             
             # Admin email
             admin_msg = MIMEMultipart()
-            admin_msg['From'] = os.environ.get("EMAIL_HOST_USER")
-            admin_msg['To'] = os.environ.get("EMAIL_HOST_USER")
+            admin_msg['From'] = settings.EMAIL_HOST_USER
+            admin_msg['To'] = settings.EMAIL_HOST_USER
             admin_msg['Subject'] = "New ECOMONKS Order Received"
             admin_msg.attach(MIMEText(admin_html, 'html', 'utf-8'))
-            server.sendmail(os.environ.get("EMAIL_HOST_USER"), os.environ.get("EMAIL_HOST_USER"), admin_msg.as_string())
+            server.sendmail(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_USER, admin_msg.as_string())
             
             server.quit()
             email_sent = True
@@ -1206,16 +1208,16 @@ def emailenquiry(request):
             
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login(os.environ.get("EMAIL_HOST_USER"), os.environ.get("EMAIL_HOST_PASSWORD"))
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
 
             # server.login("founder@ecomonks.in", "xsxfgeububphfszr")
             
             subscriber_msg = MIMEMultipart()
-            subscriber_msg['From'] = os.environ.get("EMAIL_HOST_USER")
+            subscriber_msg['From'] = settings.EMAIL_HOST_USER
             subscriber_msg['To'] = email
             subscriber_msg['Subject'] = "ECOMONKS Subscription"
             subscriber_msg.attach(MIMEText(subscription_html, 'html', 'utf-8'))
-            server.sendmail(os.environ.get("EMAIL_HOST_USER"), email, subscriber_msg.as_string())
+            server.sendmail(settings.EMAIL_HOST_USER, email, subscriber_msg.as_string())
             
             server.quit()
             
@@ -1287,16 +1289,16 @@ def send_email_otp(email, otp):
         """
         
         msg = MIMEMultipart()
-        msg['From'] = os.environ.get("EMAIL_HOST_USER")
+        msg['From'] = settings.EMAIL_HOST_USER
         msg['To'] = email
         msg['Subject'] = "🔐 ECOMONKS - Email Verification Code"
         msg.attach(MIMEText(html_content, 'html', 'utf-8'))
         
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
-        server.login(os.environ.get("EMAIL_HOST_USER"), os.environ.get("EMAIL_HOST_PASSWORD"))
-        # server.login(os.environ.get("EMAIL_HOST_USER"), os.environ.get("EMAIL_HOST_PASSWORD"))
-        server.sendmail(os.environ.get("EMAIL_HOST_USER"), email, msg.as_string())
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        # server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.sendmail(settings.EMAIL_HOST_USER, email, msg.as_string())
         server.quit()
         
         return True
