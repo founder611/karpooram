@@ -150,5 +150,5 @@ CACHES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
-EMAIL_HOST_USER = 'founder@ecomonks.in'
-EMAIL_HOST_PASSWORD = 'qbsdgkmxouvketzn'
+EMAIL_HOST_USER = 'gc2003unni@gmail.com'
+EMAIL_HOST_PASSWORD = 'odxgfudbpvbpjebx'
